@@ -121,6 +121,7 @@ public class Generator3D : MonoBehaviour {
         List<Prim.Edge> edges = new List<Prim.Edge>();
 
         foreach (var edge in delaunay.Edges) {
+            Debug.Log(edge);
             edges.Add(new Prim.Edge(edge.U, edge.V));
         }
 
@@ -244,26 +245,26 @@ public class Generator3D : MonoBehaviour {
 
     // Floor prefab
     void PlaceCube(Vector3Int location, Vector3Int size, Material material) {
-        // GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-        GameObject go = Instantiate(floorPrefab, location, Quaternion.identity);
+        GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
+        // GameObject go = Instantiate(floorPrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
-        // go.GetComponent<MeshRenderer>().material = material;
+        go.GetComponent<MeshRenderer>().material = material;
     }
 
     // Corridor prefab
     void PlaceCorridorPrefab(Vector3Int location, Vector3Int size, Material material) {
-    // GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-    GameObject go = Instantiate(corridorPrefab, location, Quaternion.identity);
+    GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
+    // GameObject go = Instantiate(corridorPrefab, location, Quaternion.identity);
     go.GetComponent<Transform>().localScale = size;
-    // go.GetComponent<MeshRenderer>().material = material;
+    go.GetComponent<MeshRenderer>().material = material;
     }
 
     // Stairs prefab
     void StairsPrefab(Vector3Int location, Vector3Int size, Material material) {
-    // GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-    GameObject go = Instantiate(stairsPrefab, location, Quaternion.identity);
+    GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
+    // GameObject go = Instantiate(stairsPrefab, location, Quaternion.identity);
     go.GetComponent<Transform>().localScale = size;
-    // go.GetComponent<MeshRenderer>().material = material;
+    go.GetComponent<MeshRenderer>().material = material;
     }
 
     void PlaceRoom(Vector3Int location, Vector3Int size) {
@@ -271,8 +272,8 @@ public class Generator3D : MonoBehaviour {
     }
 
     void PlaceHallway(Vector3Int location) {
-        //PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial);
-        PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial);
+        PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial);
+        // PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial);
     }
 
     void PlaceStairs(Vector3Int location) {

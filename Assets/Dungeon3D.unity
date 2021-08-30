@@ -653,7 +653,7 @@ MonoBehaviour:
   greenMaterial: {fileID: 2100000, guid: 13cd47135277903479d4b55421faa42e, type: 2}
   floorPrefab: {fileID: 7895329920988737149, guid: 377609c92b484aa48abd2752234681e4,
     type: 3}
-  corridorPrefab: {fileID: 126730, guid: f18932879bb23b84ca5370b65419ee41, type: 3}
+  corridorPrefab: {fileID: 180694, guid: 20a37f90760425a44ad7a8650eecc7b7, type: 3}
   stairsPrefab: {fileID: 100000, guid: bd0a17be9280439418203fe96116cee6, type: 3}
 --- !u!4 &1180316802
 Transform:

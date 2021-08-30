@@ -398,6 +398,8 @@ MonoBehaviour:
   redMaterial: {fileID: 2100000, guid: 71673d9873285904ab00282788add27f, type: 2}
   blueMaterial: {fileID: 2100000, guid: bd79999920190574a94044b2acad7316, type: 2}
   greenMaterial: {fileID: 2100000, guid: 13cd47135277903479d4b55421faa42e, type: 2}
+  floorPrefab: {fileID: 7895329920988737149, guid: 377609c92b484aa48abd2752234681e4,
+    type: 3}
 --- !u!4 &1180316802
 Transform:
   m_ObjectHideFlags: 0

@@ -32,8 +32,7 @@ public class Generator3D : MonoBehaviour {
     int roomCount;
     [SerializeField]
     Vector3Int roomMaxSize;
-    [SerializeField]
-    GameObject cubePrefab;
+    public GameObject cubePrefab;
     [SerializeField]
     Material redMaterial;
     string roomTag = "Room";
@@ -124,7 +123,6 @@ public class Generator3D : MonoBehaviour {
         List<Prim.Edge> edges = new List<Prim.Edge>();
 
         foreach (var edge in delaunay.Edges) {
-            Debug.Log(edge);
             edges.Add(new Prim.Edge(edge.U, edge.V));
         }
 

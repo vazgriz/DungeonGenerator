@@ -10,7 +10,9 @@ public class LevelAssetGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        placeHolderCubes.Add(GameObject.Find("cube(Clone)"));
+        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Stairs"));
+        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Room"));
+        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Hall"));
 
         Debug.Log(placeHolderCubes.Count);
     }

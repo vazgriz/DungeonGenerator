@@ -36,10 +36,13 @@ public class Generator3D : MonoBehaviour {
     GameObject cubePrefab;
     [SerializeField]
     Material redMaterial;
+    string roomTag = "Room";
     [SerializeField]
     Material blueMaterial;
+    string hallTag = "Hall";
     [SerializeField]
     Material greenMaterial;
+    string stairsTag = "Stairs";
 
     [SerializeField]
     GameObject floorPrefab;
@@ -244,11 +247,12 @@ public class Generator3D : MonoBehaviour {
     }
 
     // Floor prefab
-    void PlaceCube(Vector3Int location, Vector3Int size, Material material) {
+    void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag) {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
         // GameObject go = Instantiate(floorPrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
         go.GetComponent<MeshRenderer>().material = material;
+        go.tag = tag;
     }
 
     // Corridor prefab
@@ -260,7 +264,7 @@ public class Generator3D : MonoBehaviour {
     }
 
     // Stairs prefab
-    void StairsPrefab(Vector3Int location, Vector3Int size, Material material) {
+    void StairsPrefab(Vector3Int location, Vector3Int size, Material material, string tag) {
     GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
     // GameObject go = Instantiate(stairsPrefab, location, Quaternion.identity);
     go.GetComponent<Transform>().localScale = size;
@@ -268,15 +272,15 @@ public class Generator3D : MonoBehaviour {
     }
 
     void PlaceRoom(Vector3Int location, Vector3Int size) {
-        PlaceCube(location, size, redMaterial);
+        PlaceCube(location, size, redMaterial, roomTag);
     }
 
     void PlaceHallway(Vector3Int location) {
-        PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial);
+        PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
         // PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial);
     }
 
     void PlaceStairs(Vector3Int location) {
-        StairsPrefab(location, new Vector3Int(1, 1, 1), greenMaterial);
+        StairsPrefab(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
     }
 }

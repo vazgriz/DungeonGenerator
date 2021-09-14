@@ -12,7 +12,10 @@ public class LevelAssetGenerator : MonoBehaviour
         // GameObject[] halls = GameObject.FindGameObjectsWithTag("halls");
         // GameObject[] stairs = GameObject.FindGameObjectsWithTag("stairs");
 
-        Debug.Log(placeHolderCubes.Length);
+        foreach (GameObject room in rooms)
+        {
+            Debug.Log(room.transform);
+        }
     }
 
     // Update is called once per frame

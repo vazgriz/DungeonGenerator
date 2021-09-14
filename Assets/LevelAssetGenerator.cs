@@ -5,16 +5,14 @@ using UnityEngine;
 public class LevelAssetGenerator : MonoBehaviour
 {
 
-    List<GameObject> placeHolderCubes = new List<GameObject>();
-
     // Start is called before the first frame update
     void Start()
     {
-        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Stairs"));
-        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Room"));
-        placeHolderCubes.Add(GameObject.FindGameObjectWithTag("Hall"));
+        GameObject[] rooms = GameObject.FindGameObjectsWithTag("Room");
+        // GameObject[] halls = GameObject.FindGameObjectsWithTag("halls");
+        // GameObject[] stairs = GameObject.FindGameObjectsWithTag("stairs");
 
-        Debug.Log(placeHolderCubes.Count);
+        Debug.Log(placeHolderCubes.Length);
     }
 
     // Update is called once per frame

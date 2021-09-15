@@ -280,7 +280,8 @@ public class Generator3D : MonoBehaviour {
     void PlaceHallway(Vector3Int location) 
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
-        // PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial);
+        // Line below kept for testing purposes - original code
+        // PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial); 
     }
 
     void PlaceStairs(Vector3Int location) 

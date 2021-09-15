@@ -244,30 +244,24 @@ public class Generator3D : MonoBehaviour {
         }
     }
 
-    // Floor prefab
     void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag) 
     {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-        // GameObject go = Instantiate(floorPrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
         go.GetComponent<MeshRenderer>().material = material;
         go.tag = tag;
     }
 
-    // Corridor prefab
     void PlaceCorridorPrefab(Vector3Int location, Vector3Int size, Material material) 
     {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-        // GameObject go = Instantiate(corridorPrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
         go.GetComponent<MeshRenderer>().material = material;
     }
 
-    // Stairs prefab
     void StairsPrefab(Vector3Int location, Vector3Int size, Material material, string tag) 
     {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-        // GameObject go = Instantiate(stairsPrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
         go.GetComponent<MeshRenderer>().material = material;
     }
@@ -280,8 +274,6 @@ public class Generator3D : MonoBehaviour {
     void PlaceHallway(Vector3Int location) 
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
-        // Line below kept for testing purposes - original code
-        // PlaceCorridorPrefab(location, new Vector3Int(1, 1, 1), blueMaterial); 
     }
 
     void PlaceStairs(Vector3Int location) 

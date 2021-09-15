@@ -5,17 +5,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
-    public CharacterController controller;
+    public CharacterController Controller;
 
     [SerializeField]
-    public float movementSpeed = 2f;
-    public float speed = 12f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 3f;
+    public float MovementSpeed = 2f;
+    public float Speed = 12f;
+    public float Gravity = -9.81f;
+    public float JumpHeight = 3f;
 
-    public Transform groundCheck;
-    public float groundDistance = 4f;
-    public LayerMask groundMask;
+    public Transform GroundCheck;
+    public float GroundDistance = 4f;
+    public LayerMask GroundMask;
 
     Vector3 velocity;
     bool isGrounded;
@@ -27,12 +27,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
         if(isGrounded && velocity.y < 0)
         {
             Debug.Log("Grounded");
-            velocity.y = -movementSpeed;
+            velocity.y = -MovementSpeed;
         }
 
         float x = Input.GetAxis("Horizontal");
@@ -40,16 +40,16 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 move = transform.right * x + transform.forward * z;
 
-        controller.Move(move * speed * Time.deltaTime);
+        Controller.Move(move * Speed * Time.deltaTime);
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             Debug.Log("Jumping");
-            velocity.y = Mathf.Sqrt(jumpHeight * -movementSpeed * gravity);
+            velocity.y = Mathf.Sqrt(JumpHeight * -MovementSpeed * Gravity);
         }
 
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += Gravity * Time.deltaTime;
 
-        controller.Move(velocity * Time.deltaTime);
+        Controller.Move(velocity * Time.deltaTime);
     }
 }

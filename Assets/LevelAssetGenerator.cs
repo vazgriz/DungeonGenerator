@@ -11,10 +11,6 @@ public class LevelAssetGenerator : MonoBehaviour
         GameObject[] rooms = GameObject.FindGameObjectsWithTag("Room");
         GameObject[] halls = GameObject.FindGameObjectsWithTag("Halls");
         GameObject[] stairs = GameObject.FindGameObjectsWithTag("Stairs");
-
-        foreach (GameObject room in rooms)
-        {
-        }
     }
 
     void Update()

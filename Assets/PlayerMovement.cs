@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
 
     public CharacterController controller;
 
+    [SerializeField]
+    public float movementSpeed = 2f;
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
@@ -32,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
         if(isGrounded && velocity.y < 0)
         {
             Debug.Log("Grounded");
-            velocity.y = -2f;
+            velocity.y = -movementSpeed;
         }
 
         float x = Input.GetAxis("Horizontal");
@@ -45,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             Debug.Log("Jumping");
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * -movementSpeed * gravity);
         }
 
         velocity.y += gravity * Time.deltaTime;

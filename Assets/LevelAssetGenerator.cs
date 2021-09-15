@@ -5,20 +5,18 @@ using UnityEngine;
 public class LevelAssetGenerator : MonoBehaviour
 {
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Search for and add all GameObjects (cubes) marked with a scene tag to an array
         GameObject[] rooms = GameObject.FindGameObjectsWithTag("Room");
-        // GameObject[] halls = GameObject.FindGameObjectsWithTag("halls");
-        // GameObject[] stairs = GameObject.FindGameObjectsWithTag("stairs");
+        GameObject[] halls = GameObject.FindGameObjectsWithTag("Halls");
+        GameObject[] stairs = GameObject.FindGameObjectsWithTag("Stairs");
 
         foreach (GameObject room in rooms)
         {
-            Debug.Log(room.transform);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         

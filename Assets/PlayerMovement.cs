@@ -17,8 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public float GroundDistance = 4f;
     public LayerMask GroundMask;
 
-    Vector3 velocity;
-    bool isGrounded;
+    private Vector3 _velocity;
 
     void Start()
     {
@@ -27,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
+        bool isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
         if(isGrounded && velocity.y < 0)
         {
@@ -35,10 +34,10 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -MovementSpeed;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float xMovement = Input.GetAxis("Horizontal");
+        float zMovement = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        Vector3 move = transform.right * xMovement + transform.forward * zMovement;
 
         Controller.Move(move * Speed * Time.deltaTime);
 

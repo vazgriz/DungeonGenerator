@@ -28,9 +28,9 @@ public class PlayerMovement : MonoBehaviour
     {
         bool isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
-        if(isGrounded && velocity.y < 0)
+        if(isGrounded && _velocity.y < 0)
         {
-            velocity.y = -MovementSpeed;
+            _velocity.y = -MovementSpeed;
         }
 
         float xMovement = Input.GetAxis("Horizontal");
@@ -42,11 +42,11 @@ public class PlayerMovement : MonoBehaviour
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(JumpHeight * -MovementSpeed * Gravity);
+            _velocity.y = Mathf.Sqrt(JumpHeight * -MovementSpeed * Gravity);
         }
 
-        velocity.y += Gravity * Time.deltaTime;
+        _velocity.y += Gravity * Time.deltaTime;
 
-        Controller.Move(velocity * Time.deltaTime);
+        Controller.Move(_velocity * Time.deltaTime);
     }
 }

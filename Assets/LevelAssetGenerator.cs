@@ -26,9 +26,6 @@ public class LevelAssetGenerator : MonoBehaviour
 
     void Start()
     {
-        // Search for and add all GameObjects (cubes) marked with a scene tag to an array
-        // GameObject[] halls = GameObject.FindGameObjectsWithTag("Halls");
-        // GameObject[] stairs = GameObject.FindGameObjectsWithTag("Stairs");
     }
 
     void Update()
@@ -55,12 +52,4 @@ public class LevelAssetGenerator : MonoBehaviour
         go.GetComponent<MeshRenderer>().material = material;
         go.tag = tag;
     }
-
-
-
-
-
-
-
-
 }

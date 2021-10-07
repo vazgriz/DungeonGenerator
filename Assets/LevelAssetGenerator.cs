@@ -22,6 +22,11 @@ public class LevelAssetGenerator : MonoBehaviour
     [SerializeField]
     GameObject stairsPrefab;
 
+    // Modular Prefabs For Scene
+    // Floors
+    [SerializeField]
+    GameObject centre;
+
     public GameObject cubePrefab;
 
     void Start()
@@ -32,10 +37,29 @@ public class LevelAssetGenerator : MonoBehaviour
     {   
     }
 
+    bool placed;
+
     public void PlaceRoom(Vector3Int location, Vector3Int size)
     {
-        PlaceCube(location, size, redMaterial, roomTag);
+        //if (placed)
+        //{
+        //    return;
+        //}
+
+        //placed = true;
+
+        Debug.Log($"Size: {size.x}, {size.y}, {size.z}");
+        Debug.Log($"Location: {location.x}, {location.y}, {location.z}");
+
+        for (var x = location.x; x <= location.x + size.x; x++)
+        {
+            for (var z = location.z; z <= location.z + size.z; z++)
+            {
+                Instantiate(centre,new Vector3Int(x, location.y, z), Quaternion.identity);
+            }
+        }
     }
+
     public void PlaceHallway(Vector3Int location)
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
@@ -44,7 +68,6 @@ public class LevelAssetGenerator : MonoBehaviour
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
     }
-
     private void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag)
     {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);

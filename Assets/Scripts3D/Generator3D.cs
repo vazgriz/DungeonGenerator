@@ -5,6 +5,7 @@ using Random = System.Random;
 using Graphs;
 
 public class Generator3D : MonoBehaviour {
+
     enum CellType {
         None,
         Room,
@@ -26,20 +27,14 @@ public class Generator3D : MonoBehaviour {
         }
     }
 
+    private LevelAssetGenerator _levelAssetGenerator;
+
     [SerializeField]
     Vector3Int size;
     [SerializeField]
     int roomCount;
     [SerializeField]
     Vector3Int roomMaxSize;
-    [SerializeField]
-    GameObject cubePrefab;
-    [SerializeField]
-    Material redMaterial;
-    [SerializeField]
-    Material blueMaterial;
-    [SerializeField]
-    Material greenMaterial;
 
     Random random;
     Grid3D<CellType> grid;
@@ -47,10 +42,14 @@ public class Generator3D : MonoBehaviour {
     Delaunay3D delaunay;
     HashSet<Prim.Edge> selectedEdges;
 
+    private bool _havePlaced;
+
     void Start() {
         random = new Random(0);
         grid = new Grid3D<CellType>(size, Vector3Int.zero);
         rooms = new List<Room>();
+
+        _levelAssetGenerator = FindObjectOfType<LevelAssetGenerator>();
 
         PlaceRooms();
         Triangulate();
@@ -91,7 +90,7 @@ public class Generator3D : MonoBehaviour {
 
             if (add) {
                 rooms.Add(newRoom);
-                PlaceRoom(newRoom.bounds.position, newRoom.bounds.size);
+                _levelAssetGenerator.PlaceRoom(newRoom.bounds.position, newRoom.bounds.size);
 
                 foreach (var pos in newRoom.bounds.allPositionsWithin) {
                     grid[pos] = CellType.Room;
@@ -216,10 +215,10 @@ public class Generator3D : MonoBehaviour {
                             grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
                             grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
 
-                            PlaceStairs(prev + horizontalOffset);
-                            PlaceStairs(prev + horizontalOffset * 2);
-                            PlaceStairs(prev + verticalOffset + horizontalOffset);
-                            PlaceStairs(prev + verticalOffset + horizontalOffset * 2);
+                            _levelAssetGenerator.PlaceStairs(prev + horizontalOffset);
+                            _levelAssetGenerator.PlaceStairs(prev + horizontalOffset * 2);
+                            _levelAssetGenerator.PlaceStairs(prev + verticalOffset + horizontalOffset);
+                            _levelAssetGenerator.PlaceStairs(prev + verticalOffset + horizontalOffset * 2);
                         }
 
                         Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
@@ -228,28 +227,10 @@ public class Generator3D : MonoBehaviour {
 
                 foreach (var pos in path) {
                     if (grid[pos] == CellType.Hallway) {
-                        PlaceHallway(pos);
+                        _levelAssetGenerator.PlaceHallway(pos);
                     }
                 }
             }
         }
-    }
-
-    void PlaceCube(Vector3Int location, Vector3Int size, Material material) {
-        GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
-        go.GetComponent<Transform>().localScale = size;
-        go.GetComponent<MeshRenderer>().material = material;
-    }
-
-    void PlaceRoom(Vector3Int location, Vector3Int size) {
-        PlaceCube(location, size, redMaterial);
-    }
-
-    void PlaceHallway(Vector3Int location) {
-        PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial);
-    }
-
-    void PlaceStairs(Vector3Int location) {
-        PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial);
     }
 }

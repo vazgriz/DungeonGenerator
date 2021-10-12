@@ -26,6 +26,14 @@ public class LevelAssetGenerator : MonoBehaviour
     // Floors
     [SerializeField]
     GameObject centre;
+    [SerializeField]
+    GameObject southWestCorner;
+    [SerializeField]
+    GameObject southEastCorner;
+    [SerializeField]
+    GameObject northWestCorner;
+    [SerializeField]
+    GameObject northEastCorner;
 
     public GameObject cubePrefab;
 
@@ -41,23 +49,59 @@ public class LevelAssetGenerator : MonoBehaviour
 
     public void PlaceRoom(Vector3Int location, Vector3Int size)
     {
-        //if (placed)
-        //{
-        //    return;
-        //}
-
-        //placed = true;
-
         Debug.Log($"Size: {size.x}, {size.y}, {size.z}");
         Debug.Log($"Location: {location.x}, {location.y}, {location.z}");
 
-        for (var x = location.x; x <= location.x + size.x; x++)
+        var width = location.x + size.x;
+        var depth = location.z + size.z;
+        var xOrigin = location.x;
+        var zOrigin = location.z;
+
+        for (var x = xOrigin; x <= width; x++)
         {
-            for (var z = location.z; z <= location.z + size.z; z++)
+            for (var z = zOrigin; z <= depth; z++)
             {
-                Instantiate(centre,new Vector3Int(x, location.y, z), Quaternion.identity);
+                var modularPrefab = GetModularPrefab(xOrigin, zOrigin, x, z, width, depth);
+
+                Instantiate(modularPrefab, new Vector3Int(x, location.y, z), Quaternion.identity);
+                
             }
         }
+    }
+
+    private GameObject GetModularPrefab(int minX, int minZ, int x, int z, int maxX, int maxZ)
+    {
+        if (z == minZ)
+        {
+            if (x == minX)
+            {
+                return southWestCorner;
+            }
+            else if (x == maxX)
+            {
+                return southEastCorner;
+            }
+            else
+            {
+                // insert south z edge piece
+            }
+        }
+        else if (z == maxZ)
+        {
+            if (x == minX)
+            {
+                return northWestCorner;
+            }
+            else if (x == maxX)
+            {
+                return northEastCorner;
+            }
+            else
+            {
+                // insert south z edge piece
+            }
+        }
+        return centre;
     }
 
     public void PlaceHallway(Vector3Int location)

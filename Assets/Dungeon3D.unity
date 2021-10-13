@@ -1897,6 +1897,14 @@ MonoBehaviour:
   stairsPrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
   centre: {fileID: 9161464033380628415, guid: f1c75046e761c184393d8a1bb4befeb7, type: 3}
+  southWestCorner: {fileID: 2022072870604607641, guid: 199cd4268468b0148ba4fe997ef7df8e,
+    type: 3}
+  southEastCorner: {fileID: 1560378443528556224, guid: 15c08a449438c04468069fd938f9ab3c,
+    type: 3}
+  northWestCorner: {fileID: 437586254237430986, guid: 98c29699823e98045becc64295ad5bd6,
+    type: 3}
+  northEastCorner: {fileID: 9025317259084279625, guid: c71c47c070b1fb9419b8961b11302132,
+    type: 3}
   cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
 --- !u!1001 &1239157936

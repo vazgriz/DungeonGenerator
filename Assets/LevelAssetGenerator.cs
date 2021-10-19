@@ -34,6 +34,14 @@ public class LevelAssetGenerator : MonoBehaviour
     GameObject northWestCorner;
     [SerializeField]
     GameObject northEastCorner;
+    [SerializeField]
+    GameObject southEdge;
+    [SerializeField]
+    GameObject northEdge;
+    [SerializeField]
+    GameObject westEdge;
+    [SerializeField]
+    GameObject eastEdge;
 
     public GameObject cubePrefab;
 
@@ -83,7 +91,7 @@ public class LevelAssetGenerator : MonoBehaviour
             }
             else
             {
-                // insert south z edge piece
+                return southEdge;
             }
         }
         else if (z == maxZ)
@@ -98,9 +106,18 @@ public class LevelAssetGenerator : MonoBehaviour
             }
             else
             {
-                // insert south z edge piece
+                return northEdge;
             }
         }
+        else if (x == minX)
+        {
+            return westEdge;
+        }
+        else if (x == maxX)
+        {
+            return eastEdge;
+        }
+
         return centre;
     }
 

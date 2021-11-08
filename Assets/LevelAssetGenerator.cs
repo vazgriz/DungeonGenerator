@@ -125,10 +125,12 @@ public class LevelAssetGenerator : MonoBehaviour
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
     }
+
     public void PlaceStairs(Vector3Int location)
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
     }
+
     private void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag)
     {
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);

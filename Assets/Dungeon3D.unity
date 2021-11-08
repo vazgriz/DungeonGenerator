@@ -1691,7 +1691,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1904,6 +1903,14 @@ MonoBehaviour:
   northWestCorner: {fileID: 437586254237430986, guid: 98c29699823e98045becc64295ad5bd6,
     type: 3}
   northEastCorner: {fileID: 9025317259084279625, guid: c71c47c070b1fb9419b8961b11302132,
+    type: 3}
+  southEdge: {fileID: 3481384261504535798, guid: 6dddcefa621c794499e8bd59469316e6,
+    type: 3}
+  northEdge: {fileID: 3254010511296292875, guid: 909c1cc05ef20884289361a4e17ad39d,
+    type: 3}
+  westEdge: {fileID: 1817178512567572262, guid: c0a3219a5f784f74fb62585ef7e96bcf,
+    type: 3}
+  eastEdge: {fileID: 2835238316386291169, guid: b519fb11350c21042a1c25527dea6074,
     type: 3}
   cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}

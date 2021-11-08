@@ -13,20 +13,6 @@ public class Generator3D : MonoBehaviour {
         Stairs
     }
 
-    class Room {
-        public BoundsInt bounds;
-
-        public Room(Vector3Int location, Vector3Int size) {
-            bounds = new BoundsInt(location, size);
-        }
-
-        public static bool Intersect(Room a, Room b) {
-            return !((a.bounds.position.x >= (b.bounds.position.x + b.bounds.size.x)) || ((a.bounds.position.x + a.bounds.size.x) <= b.bounds.position.x)
-                || (a.bounds.position.y >= (b.bounds.position.y + b.bounds.size.y)) || ((a.bounds.position.y + a.bounds.size.y) <= b.bounds.position.y)
-                || (a.bounds.position.z >= (b.bounds.position.z + b.bounds.size.z)) || ((a.bounds.position.z + a.bounds.size.z) <= b.bounds.position.z));
-        }
-    }
-
     private LevelAssetGenerator _levelAssetGenerator;
 
     [SerializeField]
@@ -82,17 +68,17 @@ public class Generator3D : MonoBehaviour {
                 }
             }
 
-            if (newRoom.bounds.xMin < 0 || newRoom.bounds.xMax >= size.x
-                || newRoom.bounds.yMin < 0 || newRoom.bounds.yMax >= size.y
-                || newRoom.bounds.zMin < 0 || newRoom.bounds.zMax >= size.z) {
+            if (newRoom.Bounds.xMin < 0 || newRoom.Bounds.xMax >= size.x
+                || newRoom.Bounds.yMin < 0 || newRoom.Bounds.yMax >= size.y
+                || newRoom.Bounds.zMin < 0 || newRoom.Bounds.zMax >= size.z) {
                 add = false;
             }
 
             if (add) {
                 rooms.Add(newRoom);
-                _levelAssetGenerator.PlaceRoom(newRoom.bounds.position, newRoom.bounds.size);
+                _levelAssetGenerator.PlaceRoom(newRoom.Bounds.position, newRoom.Bounds.size);
 
-                foreach (var pos in newRoom.bounds.allPositionsWithin) {
+                foreach (var pos in newRoom.Bounds.allPositionsWithin) {
                     grid[pos] = CellType.Room;
                 }
             }
@@ -103,7 +89,7 @@ public class Generator3D : MonoBehaviour {
         List<Vertex> vertices = new List<Vertex>();
 
         foreach (var room in rooms) {
-            vertices.Add(new Vertex<Room>((Vector3)room.bounds.position + ((Vector3)room.bounds.size) / 2, room));
+            vertices.Add(new Vertex<Room>((Vector3)room.Bounds.position + ((Vector3)room.Bounds.size) / 2, room));
         }
 
         delaunay = Delaunay3D.Triangulate(vertices);
@@ -131,13 +117,15 @@ public class Generator3D : MonoBehaviour {
 
     void PathfindHallways() {
         DungeonPathfinder3D aStar = new DungeonPathfinder3D(size);
+        var hallways = new List<Hallway>();
+        var staircases = new List<Staircase>();
 
         foreach (var edge in selectedEdges) {
             var startRoom = (edge.U as Vertex<Room>).Item;
             var endRoom = (edge.V as Vertex<Room>).Item;
 
-            var startPosf = startRoom.bounds.center;
-            var endPosf = endRoom.bounds.center;
+            var startPosf = startRoom.Bounds.center;
+            var endPosf = endRoom.Bounds.center;
             var startPos = new Vector3Int((int)startPosf.x, (int)startPosf.y, (int)startPosf.z);
             var endPos = new Vector3Int((int)endPosf.x, (int)endPosf.y, (int)endPosf.z);
 

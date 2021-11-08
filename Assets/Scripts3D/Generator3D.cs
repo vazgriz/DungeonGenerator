@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using Graphs;
+using System.Linq;
 
 public class Generator3D : MonoBehaviour {
 
-    enum CellType {
+    public enum CellType {
         None,
         Room,
         Hallway,
@@ -29,6 +30,7 @@ public class Generator3D : MonoBehaviour {
     HashSet<Prim.Edge> selectedEdges;
 
     private bool _havePlaced;
+    private int numNotAdded = 0;
 
     void Start() {
         random = new Random(0);
@@ -40,7 +42,14 @@ public class Generator3D : MonoBehaviour {
         PlaceRooms();
         Triangulate();
         CreateHallways();
-        PathfindHallways();
+        var (hallways, staircases) = PathfindHallways();
+
+        var level = new Level(rooms, hallways, staircases);
+
+        Debug.Log($"***** GENERATED LEVEL WITH {level.Rooms.Count} ROOMS ***** ");
+        Debug.Log($"***** GENERATED LEVEL WITH {level.Hallways.Count} HALLWAYS ***** ");
+        Debug.Log($"***** GENERATED LEVEL WITH {level.Staircases.Count} STAIRCASES ***** ");
+        Debug.Log($"There were {numNotAdded} rooms not added");
     }
 
     void PlaceRooms() {
@@ -82,6 +91,10 @@ public class Generator3D : MonoBehaviour {
                     grid[pos] = CellType.Room;
                 }
             }
+            else
+            {
+                numNotAdded++;
+            }
         }
     }
 
@@ -115,12 +128,17 @@ public class Generator3D : MonoBehaviour {
         }
     }
 
-    void PathfindHallways() {
+    bool havePlaced;
+
+    (ICollection<Hallway>, ICollection<Staircase>) PathfindHallways() 
+    {
         DungeonPathfinder3D aStar = new DungeonPathfinder3D(size);
         var hallways = new List<Hallway>();
         var staircases = new List<Staircase>();
 
-        foreach (var edge in selectedEdges) {
+       
+        foreach (var edge in selectedEdges) 
+        {
             var startRoom = (edge.U as Vertex<Room>).Item;
             var endRoom = (edge.V as Vertex<Room>).Item;
 
@@ -179,46 +197,100 @@ public class Generator3D : MonoBehaviour {
                 return pathCost;
             });
 
-            if (path != null) {
-                for (int i = 0; i < path.Count; i++) {
-                    var current = path[i];
+            var (pathHallways, pathStaircases) = BuildPath(path);
+            hallways.AddRange(pathHallways);
+            staircases.AddRange(pathStaircases);
+        }
 
-                    if (grid[current] == CellType.None) {
-                        grid[current] = CellType.Hallway;
-                    }
+        return (hallways, staircases);
+    }
 
-                    if (i > 0) {
-                        var prev = path[i - 1];
+    (ICollection<Hallway>, ICollection<Staircase>) BuildPath(List<Vector3Int> path)
+    {
+        //Debug.Log("***** STARTING NEW PATH ***** ");
+        var oldWayValues = new List<Vector3Int>();
+        var lomyWayValues = new List<Vector3Int>();
 
-                        var delta = current - prev;
+        var hallways = new List<Hallway>();
+        var staircases = new List<Staircase>();
 
-                        if (delta.y != 0) {
-                            int xDir = Mathf.Clamp(delta.x, -1, 1);
-                            int zDir = Mathf.Clamp(delta.z, -1, 1);
-                            Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
-                            Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
-                            
-                            grid[prev + horizontalOffset] = CellType.Stairs;
-                            grid[prev + horizontalOffset * 2] = CellType.Stairs;
-                            grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
-                            grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
-
-                            _levelAssetGenerator.PlaceStairs(prev + horizontalOffset);
-                            _levelAssetGenerator.PlaceStairs(prev + horizontalOffset * 2);
-                            _levelAssetGenerator.PlaceStairs(prev + verticalOffset + horizontalOffset);
-                            _levelAssetGenerator.PlaceStairs(prev + verticalOffset + horizontalOffset * 2);
-                        }
-
-                        Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
-                    }
+        if (path != null)
+        {
+            for (int i = 0; i < path.Count; i++)
+            {
+                var current = path[i];
+                
+                if (grid[current] == CellType.None)
+                {
+                    grid[current] = CellType.Hallway;
                 }
 
-                foreach (var pos in path) {
-                    if (grid[pos] == CellType.Hallway) {
-                        _levelAssetGenerator.PlaceHallway(pos);
+                if (i > 0)
+                {
+                    var prev = path[i - 1];
+
+                    var delta = current - prev;
+
+                    if (delta.y != 0)
+                    {
+                        int xDir = Mathf.Clamp(delta.x, -1, 1);
+                        int zDir = Mathf.Clamp(delta.z, -1, 1);
+                        Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
+                        Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
+
+                        _levelAssetGenerator.PlaceStairSet(prev, verticalOffset, horizontalOffset);
+                        var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
+                        staircases.Add(staircase);
                     }
+                    else
+                    {
+                        lomyWayValues.Add(current);
+                    }
+
+                    Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
                 }
             }
+
+            var hallway = new Hallway();
+
+            for (int i = 0; i < path.Count; i++)
+            {
+                if (grid[path[i]] == CellType.Hallway)
+                {
+                    oldWayValues.Add(path[i]);
+                    LevelComponentPiece piece;
+                    if (i == 0)
+                    {
+                        // First
+                        _levelAssetGenerator.PlaceHallway(path[i], null, path[i + 1]);
+                        piece = new LevelComponentPiece(path[i], null, path[i + 1]);
+                    }
+                    else if (i == path.Count - 1)
+                    {
+                        // Last
+                        _levelAssetGenerator.PlaceHallway(path[i], path[i - 1], null);
+                        piece = new LevelComponentPiece(path[i], path[i - 1], null);
+                    }
+                    else
+                    {
+                        _levelAssetGenerator.PlaceHallway(path[i], path[i - 1], path[i + 1]);
+                        piece = new LevelComponentPiece(path[i], path[i - 1], path[i + 1]);
+                    }
+                    hallway.AddPiece(piece);
+                }
+            }
+
+            hallways.Add(hallway);
         }
+
+        var missingValues = oldWayValues.Where(owv => !lomyWayValues.Any(x => x == owv)).ToList();
+        var extraValues = lomyWayValues.Where(lwv => !oldWayValues.Any(x => x == lwv)).ToList();
+
+        //Debug.Log($"Lomy method has {missingValues.Select(x => x.ToString()).ToList()} missing values and {extraValues.Select(x => x.ToString()).ToList()} extra values");
+
+        //Debug.Log("***** END OF PATH ***** ");
+
+        return (hallways, staircases);
     }
 }
+

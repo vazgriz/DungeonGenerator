@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class LevelAssetGenerator : MonoBehaviour
@@ -47,18 +49,30 @@ public class LevelAssetGenerator : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(PlaceCubes());
+    }
+
+    private IEnumerator PlaceCubes()
+    {
+        foreach (var placement in CubePlacements)
+        {
+            Debug.Log($"Starting, the time is {DateTime.Now} waiting 5 seconds...");
+            yield return new WaitForSeconds(0);
+            Debug.Log($"Placing cube at {DateTime.Now}");
+            placement.Invoke(9);
+        }
     }
 
     void Update()
     {   
     }
 
-    bool placed;
+    List<Func<int, int>> CubePlacements = new List<Func<int, int>>();
 
     public void PlaceRoom(Vector3Int location, Vector3Int size)
     {
-        Debug.Log($"Size: {size.x}, {size.y}, {size.z}");
-        Debug.Log($"Location: {location.x}, {location.y}, {location.z}");
+        //Debug.Log($"Size: {size.x}, {size.y}, {size.z}");
+        //Debug.Log($"Location: {location.x}, {location.y}, {location.z}");
 
         var width = location.x + size.x;
         var depth = location.z + size.z;
@@ -121,18 +135,34 @@ public class LevelAssetGenerator : MonoBehaviour
         return centre;
     }
 
-    public void PlaceHallway(Vector3Int location)
+
+    public void PlaceHallway(Vector3Int location, Vector3Int? previous, Vector3Int? next)
     {
         PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
+        //return 1;
+        
     }
 
     public void PlaceStairs(Vector3Int location)
     {
-        PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
+        //CubePlacements.Add(_ =>
+        {
+            PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
+            //return 1;
+        };
+    }
+
+    public void PlaceStairSet(Vector3Int previous, Vector3Int verticalOffset, Vector3Int horizontalOffset)
+    {
+        PlaceStairs(previous + horizontalOffset);
+        PlaceStairs(previous + horizontalOffset * 2);
+        PlaceStairs(previous + verticalOffset + horizontalOffset);
+        PlaceStairs(previous + verticalOffset + horizontalOffset * 2);
     }
 
     private void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag)
     {
+        //Debug.Log($"Placed {tag} at ({location.x}, {location.y}, {location.z})");
         GameObject go = Instantiate(cubePrefab, location, Quaternion.identity);
         go.GetComponent<Transform>().localScale = size;
         go.GetComponent<MeshRenderer>().material = material;

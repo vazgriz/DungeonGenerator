@@ -1,12 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelComponent : MonoBehaviour
 {
-    public BoundsInt Bounds { get; }
+    public ICollection<LevelComponentPiece> Pieces { get; } = new List<LevelComponentPiece>();
+
+    public BoundsInt Bounds { get; protected set; }
 
     public LevelComponent(Vector3Int location, Vector3Int size)
     {
         Bounds = new BoundsInt(location, size);
+    }
+
+    protected LevelComponent() { }
+
+    public void AddPiece(LevelComponentPiece piece)
+    {
+        Pieces.Add(piece);
     }
 
     public static bool Intersect(LevelComponent a, LevelComponent b)

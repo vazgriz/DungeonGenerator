@@ -1057,6 +1057,7 @@ GameObject:
   - component: {fileID: 1180316802}
   - component: {fileID: 1180316801}
   - component: {fileID: 1180316803}
+  - component: {fileID: 1180316804}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -1114,6 +1115,20 @@ MonoBehaviour:
     type: 3}
   stairsPrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
+  cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
+    type: 3}
+--- !u!114 &1180316804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180316800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82b18eef12d9dce4fb406dcf35f13604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   centre: {fileID: 9161464033380628415, guid: f1c75046e761c184393d8a1bb4befeb7, type: 3}
   southWestCorner: {fileID: 2022072870604607641, guid: 199cd4268468b0148ba4fe997ef7df8e,
     type: 3}
@@ -1130,8 +1145,6 @@ MonoBehaviour:
   westEdge: {fileID: 1817178512567572262, guid: c0a3219a5f784f74fb62585ef7e96bcf,
     type: 3}
   eastEdge: {fileID: 2835238316386291169, guid: b519fb11350c21042a1c25527dea6074,
-    type: 3}
-  cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
 --- !u!1001 &1239157936
 PrefabInstance:

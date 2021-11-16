@@ -34,12 +34,7 @@ namespace Assets.Level.Builders
         }
         public void Build(Models.Level level)
         {
-
-        }
-
-        public void PlaceRoom(Vector3Int location, Vector3Int size)
-        {
-            _roomBuilder.Build(location, size);
+            _roomBuilder.BuildMany(level.Rooms);
         }
 
         public void PlaceHallway(Vector3Int location, Vector3Int? previous, Vector3Int? next)

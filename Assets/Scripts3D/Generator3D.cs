@@ -45,6 +45,7 @@ public class Generator3D : MonoBehaviour {
         var (hallways, staircases) = PathfindHallways();
 
         var level = new Level(rooms, hallways, staircases);
+        _levelBuilder.Build(level);
 
         Debug.Log($"***** GENERATED LEVEL WITH {level.Rooms.Count} ROOMS ***** ");
         Debug.Log($"***** GENERATED LEVEL WITH {level.Hallways.Count} HALLWAYS ***** ");
@@ -85,7 +86,6 @@ public class Generator3D : MonoBehaviour {
 
             if (add) {
                 rooms.Add(newRoom);
-                _levelBuilder.PlaceRoom(newRoom.Bounds.position, newRoom.Bounds.size);
 
                 foreach (var pos in newRoom.Bounds.allPositionsWithin) {
                     grid[pos] = CellType.Room;

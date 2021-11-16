@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Level.Models;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Level.Builders
 {
@@ -23,11 +25,21 @@ namespace Assets.Level.Builders
         [SerializeField]
         GameObject eastEdge;
 
-        public void Build(Vector3Int location, Vector3Int size)
+        public void BuildMany(ICollection<Room> rooms)
         {
-            //Debug.Log($"Size: {size.x}, {size.y}, {size.z}");
-            //Debug.Log($"Location: {location.x}, {location.y}, {location.z}");
+            foreach (var room in rooms)
+            {
+                Build(room);
+            }
+        }
 
+        public void Build(Room room)
+        {
+            Build(room.Bounds.position, room.Bounds.size);
+        }
+
+        private void Build(Vector3Int location, Vector3Int size)
+        {
             var width = location.x + size.x;
             var depth = location.z + size.z;
             var xOrigin = location.x;

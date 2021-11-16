@@ -4,53 +4,30 @@ namespace Assets.Level.Builders
 {
     public class LevelBuilder : MonoBehaviour
     {
-
-        [SerializeField]
-        Material redMaterial;
-        string roomTag = "Room";
-        [SerializeField]
-        Material blueMaterial;
-        string hallTag = "Hall";
         [SerializeField]
         Material greenMaterial;
         string stairsTag = "Stairs";
 
-        [SerializeField]
-        GameObject floorPrefab;
-        [SerializeField]
-        GameObject corridorPrefab;
-        [SerializeField]
-        GameObject stairsPrefab;
-
-
         public GameObject cubePrefab;
 
         private RoomBuilder _roomBuilder;
+        private HallwayBuilder _hallwayBuilder;
 
         private void Awake()
         {
             _roomBuilder = FindObjectOfType<RoomBuilder>();
+            _hallwayBuilder = FindObjectOfType<HallwayBuilder>();
 
         }
         public void Build(Models.Level level)
         {
             _roomBuilder.BuildMany(level.Rooms);
-        }
-
-        public void PlaceHallway(Vector3Int location, Vector3Int? previous, Vector3Int? next)
-        {
-            PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
-            //return 1;
-
+            _hallwayBuilder.BuildMany(level.Hallways);
         }
 
         public void PlaceStairs(Vector3Int location)
         {
-            //CubePlacements.Add(_ =>
-            {
-                PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
-                //return 1;
-            };
+            PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
         }
 
         public void PlaceStairSet(Vector3Int previous, Vector3Int verticalOffset, Vector3Int horizontalOffset)

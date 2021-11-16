@@ -50,10 +50,7 @@ namespace Assets.Level.Builders
                 for (var z = zOrigin; z <= depth; z++)
                 {
                     var modularPrefab = GetModularPrefab(xOrigin, zOrigin, x, z, width, depth);
-
-                    Debug.Log($"Instantiating: {modularPrefab}, {x}, {location.y}, {z}");
                     Instantiate(modularPrefab, new Vector3Int(x, location.y, z), Quaternion.identity);
-
                 }
             }
         }

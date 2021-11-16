@@ -224,20 +224,18 @@ public class Generator3D : MonoBehaviour {
                     if (i == 0)
                     {
                         // First
-                        _levelBuilder.PlaceHallway(path[i], null, path[i + 1]);
                         piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, path[i + 1]);
                     }
                     else if (i == path.Count - 1)
                     {
                         // Last
-                        _levelBuilder.PlaceHallway(path[i], path[i - 1], null);
                         piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, null);
                     }
                     else
                     {
-                        _levelBuilder.PlaceHallway(path[i], path[i - 1], path[i + 1]);
                         piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, path[i + 1]);
                     }
+                    //Debug.Log($"Adding piece to hallway: {piece}, {piece.Location}");
                     hallway.AddPiece(piece);
                     previousPiece = piece;
                 }

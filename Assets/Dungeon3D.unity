@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!143 &199184519
 CharacterController:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199184518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 22.6, z: 0}
+  m_LocalPosition: {x: 0, y: 51.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1115270852}
@@ -189,12 +189,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7af3e86db7d5a4da41408d05a93e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
+  Controller: {fileID: 199184519}
   MovementSpeed: 2
   Speed: 12
   Gravity: -9.81
   JumpHeight: 3
-  GroundCheck: {fileID: 0}
+  GroundCheck: {fileID: 1454960726}
   GroundDistance: 4
   GroundMask:
     serializedVersion: 2
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5bdd851fd22f874eb330164f8224f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerBody: {fileID: 0}
+  PlayerBody: {fileID: 1115270852}
 --- !u!1 &1115270851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,14 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241d403424997e4eba4ebc8be897f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redMaterial: {fileID: 2100000, guid: 71673d9873285904ab00282788add27f, type: 2}
   greenMaterial: {fileID: 2100000, guid: 13cd47135277903479d4b55421faa42e, type: 2}
-  floorPrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
-    type: 3}
-  corridorPrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
-    type: 3}
-  stairsPrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
-    type: 3}
   cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
 --- !u!114 &1180316804

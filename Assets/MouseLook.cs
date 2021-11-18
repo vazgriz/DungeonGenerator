@@ -8,7 +8,7 @@ public class MouseLook : MonoBehaviour
 
     public Transform PlayerBody;
 
-    private float xRotation = 0f;
+    private float xRotation;
 
     void Start()
     {

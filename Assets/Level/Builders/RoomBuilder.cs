@@ -9,23 +9,6 @@ namespace Assets.Level.Builders
     public class RoomBuilder : MonoBehaviour
     {
         [SerializeField]
-        GameObject centre;
-        [SerializeField]
-        GameObject southWestCorner;
-        [SerializeField]
-        GameObject southEastCorner;
-        [SerializeField]
-        GameObject northWestCorner;
-        [SerializeField]
-        GameObject northEastCorner;
-        [SerializeField]
-        GameObject southEdge;
-        [SerializeField]
-        GameObject northEdge;
-        [SerializeField]
-        GameObject westEdge;
-        [SerializeField]
-        GameObject eastEdge;
 
         private StructureBuilder _structureBuilder;
 

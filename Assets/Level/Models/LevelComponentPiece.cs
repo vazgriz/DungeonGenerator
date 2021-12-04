@@ -10,12 +10,16 @@ namespace Assets.Level.Models
         public LevelComponentPiece Previous { get; }
         public Vector3Int? Next { get; }
 
-        public LevelComponentPiece(Guid parentId, Vector3Int location, LevelComponentPiece previous, Vector3Int? next)
+        public LevelComponentPiece(Guid parentId, Vector3Int location, Vector3Int? next)
         {
             ParentId = parentId;
             Location = location;
-            Previous = previous;
             Next = next;
+        }
+
+        public LevelComponentPiece(Guid parentId, Vector3Int location, Vector3Int? next, ref LevelComponentPiece previous) : this(parentId, location, next)
+        {            
+            Previous = previous;
         }
     }
 }

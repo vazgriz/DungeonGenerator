@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!143 &199184519
 CharacterController:
   m_ObjectHideFlags: 0
@@ -712,7 +712,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -910,6 +910,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1059,6 +1060,7 @@ GameObject:
   - component: {fileID: 1180316803}
   - component: {fileID: 1180316804}
   - component: {fileID: 1180316805}
+  - component: {fileID: 1180316806}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -1079,7 +1081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: {x: 30, y: 10, z: 30}
-  roomCount: 121
+  roomCount: 120
   roomMaxSize: {x: 6, y: 2, z: 6}
 --- !u!4 &1180316802
 Transform:
@@ -1108,6 +1110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   greenMaterial: {fileID: 2100000, guid: 13cd47135277903479d4b55421faa42e, type: 2}
+  redMaterial: {fileID: 2100000, guid: 71673d9873285904ab00282788add27f, type: 2}
+  blueMaterial: {fileID: 2100000, guid: bd79999920190574a94044b2acad7316, type: 2}
   cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
 --- !u!114 &1180316804
@@ -1139,6 +1143,10 @@ MonoBehaviour:
     type: 3}
   eastEdge: {fileID: 2835238316386291169, guid: b519fb11350c21042a1c25527dea6074,
     type: 3}
+  _ceiling: {fileID: 4192577636214743495, guid: c21b702d845fe0b4b9522524495f0c1f,
+    type: 3}
+  _floor: {fileID: 4192577636214743495, guid: 3af4e14782b98084f96e1c397f5b1f39, type: 3}
+  _wall: {fileID: 8955920289896648722, guid: 7a6de4c8996f65a4ea47da8f0fec3ec0, type: 3}
 --- !u!114 &1180316805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1151,7 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a70242de56148479139904b0cb4ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hallwayMaterial: {fileID: 2100000, guid: bd79999920190574a94044b2acad7316, type: 2}
+  _hallwayMaterial: {fileID: 2100000, guid: 71673d9873285904ab00282788add27f, type: 2}
   _hallway: {fileID: 3481384261504535798, guid: 6dddcefa621c794499e8bd59469316e6,
     type: 3}
   _hallwayL: {fileID: 3481384261504535798, guid: a470bf08d77825b4296c4081e5d52ffa,
@@ -1160,6 +1168,19 @@ MonoBehaviour:
     type: 3}
   cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
     type: 3}
+--- !u!114 &1180316806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180316800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59382a3f914a3c14a926044d4c1c8279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _staircase: {fileID: 141558, guid: 67da585b6785b484dabda72df240d375, type: 3}
 --- !u!1001 &1239157936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1281,7 +1302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474797179}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.5, y: 4.5, z: 13.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1180316802}

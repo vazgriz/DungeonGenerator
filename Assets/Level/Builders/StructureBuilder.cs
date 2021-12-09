@@ -31,7 +31,7 @@ namespace Assets.Level.Builders
                 for (var y = yOrigin; y < yOrigin + height; y++)
                 {
                     BuildWall(x, y, zOrigin, Direction.South);
-                    BuildWall(x, y, zOrigin + depth, Direction.North);
+                    BuildWall(x, y, zOrigin + depth - 1, Direction.North);
                 }
             }
 
@@ -41,7 +41,7 @@ namespace Assets.Level.Builders
                 for (var y = yOrigin; y < yOrigin + height; y++)
                 {
                     BuildWall(xOrigin, y, z, Direction.West);
-                    BuildWall(xOrigin + width, y, z, Direction.East);
+                    BuildWall(xOrigin + width - 1, y, z, Direction.East);
                 }
             }
         }
@@ -51,11 +51,12 @@ namespace Assets.Level.Builders
             // Wall by default sits on North side of origin unit square
             switch (direction)
             {
-                case Direction.North:
-                    Instantiate(_wall, new Vector3(x + 0.5f, y, z), Quaternion.identity);
+                case Direction.North: 
+                    var northWall = Instantiate(_wall, new Vector3(x + 0.5f, y, z + 1), Quaternion.identity);
+                    northWall.transform.localRotation = Quaternion.identity;
                     break;
                 case Direction.East:
-                    var eastWall = Instantiate(_wall, new Vector3(x, y, z + 0.5f), Quaternion.identity);
+                    var eastWall = Instantiate(_wall, new Vector3(x + 1, y, z + 0.5f), Quaternion.identity);
                     eastWall.transform.localRotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case Direction.South:

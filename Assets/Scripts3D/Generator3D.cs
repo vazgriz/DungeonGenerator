@@ -27,7 +27,6 @@ public class Generator3D : MonoBehaviour {
     Random random;
     Grid3D<CellType> grid;
     List<Room> rooms;
-    Delaunay3D delaunay;
     HashSet<Prim.Edge> selectedEdges;
 
     private int numNotAdded = 0;
@@ -40,8 +39,8 @@ public class Generator3D : MonoBehaviour {
         _levelBuilder = FindObjectOfType<LevelBuilder>();
 
         PlaceRooms();
-        Triangulate();
-        CreateHallways();
+        var delaunay = Triangulate();
+        CreateHallways(delaunay);
         var (hallways, staircases) = PathfindHallways();
 
         var level = new Level(rooms, hallways, staircases);
@@ -85,6 +84,7 @@ public class Generator3D : MonoBehaviour {
             }
 
             if (add) {
+                _levelBuilder.PlaceRoom(newRoom.Bounds.position, newRoom.Bounds.size);
                 rooms.Add(newRoom);
 
                 foreach (var pos in newRoom.Bounds.allPositionsWithin) {
@@ -98,17 +98,17 @@ public class Generator3D : MonoBehaviour {
         }
     }
 
-    void Triangulate() {
+    private Delaunay3D Triangulate() {
         List<Vertex> vertices = new List<Vertex>();
 
         foreach (var room in rooms) {
             vertices.Add(new Vertex<Room>((Vector3)room.Bounds.position + ((Vector3)room.Bounds.size) / 2, room));
         }
 
-        delaunay = Delaunay3D.Triangulate(vertices);
+        return Delaunay3D.Triangulate(vertices);
     }
 
-    void CreateHallways() {
+    void CreateHallways(Delaunay3D delaunay) {
         List<Prim.Edge> edges = new List<Prim.Edge>();
 
         foreach (var edge in delaunay.Edges) {
@@ -128,8 +128,6 @@ public class Generator3D : MonoBehaviour {
         }
     }
 
-    bool havePlaced;
-
     (ICollection<Hallway>, ICollection<Staircase>) PathfindHallways() 
     {
         DungeonPathfinder3D aStar = new DungeonPathfinder3D(size);
@@ -147,7 +145,8 @@ public class Generator3D : MonoBehaviour {
             var startPos = new Vector3Int((int)startPosf.x, (int)startPosf.y, (int)startPosf.z);
             var endPos = new Vector3Int((int)endPosf.x, (int)endPosf.y, (int)endPosf.z);
 
-            var path = aStar.FindPath(startPos, endPos, (DungeonPathfinder3D.Node a, DungeonPathfinder3D.Node b) => {
+            var path = aStar.FindPath(startPos, endPos, (DungeonPathfinder3D.Node a, DungeonPathfinder3D.Node b) => 
+            {
                 var pathCost = new DungeonPathfinder3D.PathCost();
 
                 var delta = b.Position - a.Position;
@@ -165,28 +164,35 @@ public class Generator3D : MonoBehaviour {
                     }
 
                     pathCost.traversable = true;
-                } else {
+                } 
+                else 
+                {
                     //staircase
                     if ((grid[a.Position] != CellType.None && grid[a.Position] != CellType.Hallway)
-                        || (grid[b.Position] != CellType.None && grid[b.Position] != CellType.Hallway)) return pathCost;
+                        || (grid[b.Position] != CellType.None && grid[b.Position] != CellType.Hallway))
+                    {
+                        return pathCost;
+                    }
 
                     pathCost.cost = 100 + Vector3Int.Distance(b.Position, endPos);    //base cost + heuristic
 
                     int xDir = Mathf.Clamp(delta.x, -1, 1);
                     int zDir = Mathf.Clamp(delta.z, -1, 1);
-                    Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
-                    Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
+                    var verticalOffset = new Vector3Int(0, delta.y, 0);
+                    var horizontalOffset = new Vector3Int(xDir, 0, zDir);
 
                     if (!grid.InBounds(a.Position + verticalOffset)
                         || !grid.InBounds(a.Position + horizontalOffset)
-                        || !grid.InBounds(a.Position + verticalOffset + horizontalOffset)) {
+                        || !grid.InBounds(a.Position + verticalOffset + horizontalOffset)) 
+                    {
                         return pathCost;
                     }
 
                     if (grid[a.Position + horizontalOffset] != CellType.None
                         || grid[a.Position + horizontalOffset * 2] != CellType.None
                         || grid[a.Position + verticalOffset + horizontalOffset] != CellType.None
-                        || grid[a.Position + verticalOffset + horizontalOffset * 2] != CellType.None) {
+                        || grid[a.Position + verticalOffset + horizontalOffset * 2] != CellType.None) 
+                    {
                         return pathCost;
                     }
 
@@ -218,48 +224,67 @@ public class Generator3D : MonoBehaviour {
             {
                 var current = path[i];
 
-                if (grid[path[i]] == CellType.Hallway || grid[path[i]] == CellType.None)
-                {
-                    LevelComponentPiece piece;
-                    if (i == 0)
-                    {
-                        // First
-                        piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, path[i + 1]);
-                    }
-                    else if (i == path.Count - 1)
-                    {
-                        // Last
-                        piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, null);
-                    }
-                    else
-                    {
-                        piece = new LevelComponentPiece(hallway.Id, path[i], previousPiece, path[i + 1]);
-                    }
-                    //Debug.Log($"Adding piece to hallway: {piece}, {piece.Location}");
-                    hallway.AddPiece(piece);
-                    previousPiece = piece;
-                }
-                else
                 {
                     if (i > 0)
                     {
                         var prev = path[i - 1];
 
                         var delta = current - prev;
-                        
-                        int xDir = Mathf.Clamp(delta.x, -1, 1);
-                        int zDir = Mathf.Clamp(delta.z, -1, 1);
-                        Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
-                        Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
+                        if (delta.y != 0)
+                        {
+                            int xDir = Mathf.Clamp(delta.x, -1, 1);
+                            int zDir = Mathf.Clamp(delta.z, -1, 1);
+                            Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
+                            Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
 
-                        _levelBuilder.PlaceStairSet(prev, verticalOffset, horizontalOffset);
-                        var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
-                        staircases.Add(staircase);
-                        previousPiece = staircase.Pieces.Single(x => x.Next == null);
+                            grid[prev + horizontalOffset] = CellType.Stairs;
+                            grid[prev + horizontalOffset * 2] = CellType.Stairs;
+                            grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
+                            grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
 
-                        Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
+                            _levelBuilder.PlaceStairSet(prev, verticalOffset, horizontalOffset);
+                            var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
+                            staircases.Add(staircase);
+                            
+                            if (previousPiece != null)
+                            {
+                                previousPiece.Next = staircase.Pieces.Single(x => x.Previous == null).Location;
+                            }
+                            previousPiece = staircase.Pieces.Single(x => x.Next == null);
+
+                            Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
+                        }
                     }
-                }                
+                }
+
+                if (grid[current] == CellType.Hallway || grid[current] == CellType.None)
+                {
+                    LevelComponentPiece piece;
+                    if (i == 0)
+                    {
+                        // First
+                        piece = new LevelComponentPiece(hallway.Id, path[i], path[i + 1], ref previousPiece);
+                    }
+                    else if (i == path.Count - 1)
+                    {
+                        // Last
+                        piece = new LevelComponentPiece(hallway.Id, path[i], null, ref previousPiece);
+                    }
+                    else
+                    {
+                        piece = new LevelComponentPiece(hallway.Id, path[i], path[i + 1], ref previousPiece);
+                    }
+                    //Debug.Log($"Adding piece to hallway: {piece}, {piece.Location}");
+                    hallway.AddPiece(piece);
+
+                    if (previousPiece != null)
+                    {
+                        previousPiece.Next = piece.Location;
+                    }
+                    previousPiece = piece;
+                    _levelBuilder.PlaceHallway(path[i]);
+                }
+
             }
 
             hallways.Add(hallway);

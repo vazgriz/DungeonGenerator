@@ -8,7 +8,7 @@ namespace Assets.Level.Models
         public Guid ParentId { get; }
         public Vector3Int Location { get; }
         public LevelComponentPiece Previous { get; }
-        public Vector3Int? Next { get; }
+        public Vector3Int? Next { get; set; }
 
         public LevelComponentPiece(Guid parentId, Vector3Int location, Vector3Int? next)
         {

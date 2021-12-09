@@ -223,49 +223,41 @@ public class Generator3D : MonoBehaviour {
             for (int i = 0; i < path.Count; i++)
             {
                 var current = path[i];
-
+                if (i > 0)
                 {
-                    if (i > 0)
+                    var prev = path[i - 1];
+
+                    var delta = current - prev;
+                    if (delta.y != 0)
                     {
-                        var prev = path[i - 1];
+                        int xDir = Mathf.Clamp(delta.x, -1, 1);
+                        int zDir = Mathf.Clamp(delta.z, -1, 1);
+                        Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
+                        Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
 
-                        var delta = current - prev;
-                        if (delta.y != 0)
-                        {
-                            int xDir = Mathf.Clamp(delta.x, -1, 1);
-                            int zDir = Mathf.Clamp(delta.z, -1, 1);
-                            Vector3Int verticalOffset = new Vector3Int(0, delta.y, 0);
-                            Vector3Int horizontalOffset = new Vector3Int(xDir, 0, zDir);
+                        grid[prev + horizontalOffset] = CellType.Stairs;
+                        grid[prev + horizontalOffset * 2] = CellType.Stairs;
+                        grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
+                        grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
 
-                            grid[prev + horizontalOffset] = CellType.Stairs;
-                            grid[prev + horizontalOffset * 2] = CellType.Stairs;
-                            grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
-                            grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
-
-                            _levelBuilder.PlaceStairSet(prev, verticalOffset, horizontalOffset);
-                            var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
-                            staircases.Add(staircase);
+                        _levelBuilder.PlaceStairSet(prev, verticalOffset, horizontalOffset);
+                        var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
+                        staircases.Add(staircase);
                             
-                            if (previousPiece != null)
-                            {
-                                previousPiece.Next = staircase.Pieces.Single(x => x.Previous == null).Location;
-                            }
-                            previousPiece = staircase.Pieces.Single(x => x.Next == null);
-
-                            Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
+                        if (previousPiece != null)
+                        {
+                            previousPiece.Next = staircase.Pieces.Single(x => x.Previous == null).Location;
                         }
+                        previousPiece = staircase.Pieces.Single(x => x.Next == null);
+
+                        Debug.DrawLine(prev + new Vector3(0.5f, 0.5f, 0.5f), current + new Vector3(0.5f, 0.5f, 0.5f), Color.blue, 100, false);
                     }
                 }
 
                 if (grid[current] == CellType.Hallway || grid[current] == CellType.None)
                 {
                     LevelComponentPiece piece;
-                    if (i == 0)
-                    {
-                        // First
-                        piece = new LevelComponentPiece(hallway.Id, path[i], path[i + 1], ref previousPiece);
-                    }
-                    else if (i == path.Count - 1)
+                    if (i == path.Count - 1)
                     {
                         // Last
                         piece = new LevelComponentPiece(hallway.Id, path[i], null, ref previousPiece);
@@ -274,7 +266,6 @@ public class Generator3D : MonoBehaviour {
                     {
                         piece = new LevelComponentPiece(hallway.Id, path[i], path[i + 1], ref previousPiece);
                     }
-                    //Debug.Log($"Adding piece to hallway: {piece}, {piece.Location}");
                     hallway.AddPiece(piece);
 
                     if (previousPiece != null)
@@ -282,7 +273,7 @@ public class Generator3D : MonoBehaviour {
                         previousPiece.Next = piece.Location;
                     }
                     previousPiece = piece;
-                    _levelBuilder.PlaceHallway(path[i]);
+                    _levelBuilder.PlaceHallway(piece.Location);
                 }
 
             }

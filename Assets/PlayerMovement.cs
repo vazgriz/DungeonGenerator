@@ -26,12 +26,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        return;
         bool isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
-        if(isGrounded && _velocity.y < 0)
-        {
-            _velocity.y = -MovementSpeed;
-        }
+        //if (isGrounded && _velocity.y < 0)
+        //{
+        //    _velocity.y = -MovementSpeed;
+        //}
 
         float xMovement = Input.GetAxis("Horizontal");
         float zMovement = Input.GetAxis("Vertical");

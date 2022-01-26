@@ -30,30 +30,45 @@ namespace Assets.Level.Builders
              * 
              */
             var location = staircase.Previous + staircase.HorizontalOffset;
-
             var placedStaircase = Instantiate(_staircase, location, Quaternion.identity);
 
-            switch(staircase.Direction)
+            int localRotation;
+            float xOffset;
+            float yOffset;
+            float zOffset;
+
+            switch (staircase.Direction)
             {
                 case Direction.North:
-                    placedStaircase.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    placedStaircase.transform.position += new Vector3(0.5f, 0, 0);
+                    localRotation = 180 + (staircase.IsUp ? 0 : 180);
+                    xOffset = 0.5f;
+                    yOffset = 0 + (staircase.IsUp ? 0 : -1f);
+                    zOffset = 0 + (staircase.IsUp ? 0 : 2f);
                     break;
                 case Direction.East:
-                    placedStaircase.transform.localRotation = Quaternion.Euler(0, 270, 0);
-                    placedStaircase.transform.position += new Vector3(0, 0, 0.5f);
+                    localRotation = 270 + (staircase.IsUp ? 0 : 180);
+                    xOffset = 0 + (staircase.IsUp ? 0 : 2f);
+                    yOffset = 0 + (staircase.IsUp ? 0 : -1f);
+                    zOffset = 0.5f;
                     break;
                 case Direction.South:
-                    placedStaircase.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    placedStaircase.transform.position += new Vector3(0.5f, 0, 1);
+                    localRotation = 0 + (staircase.IsUp ? 0 : 180);
+                    xOffset = 0.5f;
+                    yOffset = 0 + (staircase.IsUp ? 0 : -1f);
+                    zOffset = 1 + (staircase.IsUp ? 0 : -2f);
                     break;
                 case Direction.West:
-                    placedStaircase.transform.localRotation = Quaternion.Euler(0, 90, 0);
-                    placedStaircase.transform.position += new Vector3(1, 0, 0.5f);
+                    localRotation = 90 + (staircase.IsUp ? 0 : 180);
+                    xOffset = 1 + (staircase.IsUp ? 0 : -2f);
+                    yOffset = 0 + (staircase.IsUp ? 0 : -1f);
+                    zOffset = 0.5f;
                     break;
                 default:
                     throw new ArgumentException();
             }
+
+            placedStaircase.transform.localRotation = Quaternion.Euler(0, localRotation, 0);
+            placedStaircase.transform.position += new Vector3(xOffset, yOffset, zOffset);
         }
     }
 }

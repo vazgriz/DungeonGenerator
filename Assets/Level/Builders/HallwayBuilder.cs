@@ -64,7 +64,7 @@ namespace Assets.Level.Builders
                 piecesString += Environment.NewLine;
             }
 
-            Debug.Log($"Built Hallway: {hallway} with pieces: {piecesString}");
+            //Debug.Log($"Built Hallway: {hallway} with pieces: {piecesString}");
 
 
 
@@ -92,11 +92,11 @@ namespace Assets.Level.Builders
                 wallDirections.Add(direction);
             }
 
-            Debug.Log($"Piece with neighbours {previousDirection}, {nextDirection}. Placing walls: ");
+            //Debug.Log($"Piece with neighbours {previousDirection}, {nextDirection}. Placing walls: ");
 
             foreach (var wallDirection in wallDirections)
             {
-                Debug.Log($"{wallDirection}");
+                //Debug.Log($"{wallDirection}");
                 _structureBuilder.BuildWall(location.x, location.y, location.z, wallDirection);
             }
         }

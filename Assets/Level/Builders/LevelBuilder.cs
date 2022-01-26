@@ -20,7 +20,6 @@ namespace Assets.Level.Builders
         private RoomBuilder _roomBuilder;
         private HallwayBuilder _hallwayBuilder;
         private StaircaseBuilder _staircaseBuilder;
-        bool havePlaced = false;
 
         private void Awake()
         {
@@ -40,7 +39,7 @@ namespace Assets.Level.Builders
 
         public void PlaceStairs(Vector3Int location)
         {
-            //PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
+            PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial, stairsTag);
         }
 
         public void PlaceStairSet(Vector3Int previous, Vector3Int verticalOffset, Vector3Int horizontalOffset)
@@ -59,10 +58,10 @@ namespace Assets.Level.Builders
             //Debug.Log($"{previous + verticalOffset + horizontalOffset * 2}");
 
 
-            PlaceStairs(previous + horizontalOffset);
-            PlaceStairs(previous + horizontalOffset * 2);
-            PlaceStairs(previous + verticalOffset + horizontalOffset);
-            PlaceStairs(previous + verticalOffset + horizontalOffset * 2);
+            //PlaceStairs(previous + horizontalOffset);
+            //PlaceStairs(previous + horizontalOffset * 2);
+            //PlaceStairs(previous + verticalOffset + horizontalOffset);
+            //PlaceStairs(previous + verticalOffset + horizontalOffset * 2);
         }
 
         public void PlaceRoom(Vector3Int location, Vector3Int size)
@@ -71,7 +70,7 @@ namespace Assets.Level.Builders
         }
         public void PlaceHallway(Vector3Int location)
         {
-            PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
+            //PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial, hallTag);
         }
         private void PlaceCube(Vector3Int location, Vector3Int size, Material material, string tag)
         {

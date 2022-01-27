@@ -198,28 +198,20 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9066884971481039331}
   m_PrefabAsset: {fileID: 0}
---- !u!195 &970478692
-NavMeshAgent:
+--- !u!114 &970478687
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970478686}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7bf0343fd696944935e3c6bd8e7971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FPCamera: {fileID: 0}
+  Range: 100
 --- !u!4 &1222296695 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1336994966329576201, guid: 803ced248e3549b4eab6a0ad05639f16,
@@ -478,6 +470,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 970478692, guid: b542c4f735558eb4bbcfac35da9e00ff, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 137472931029806670, guid: b542c4f735558eb4bbcfac35da9e00ff,
         type: 3}
       propertyPath: m_Name

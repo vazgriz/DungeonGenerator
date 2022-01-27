@@ -10,6 +10,7 @@ public class EnemyAI : MonoBehaviour
 
     public float SightRange = 5.0f;
     private float _distanceToTarget;
+    bool isProvoked = false;
 
     // Start is called before the first frame update
     void Start()
@@ -22,11 +23,38 @@ public class EnemyAI : MonoBehaviour
     {
 
         _distanceToTarget = Vector3.Distance(target.position, transform.position);
-
-        if(_distanceToTarget <= SightRange)
+        if(isProvoked)
         {
-            navMeshAgent.SetDestination(target.position);
+            EngageTarget();
         }
+        else if(_distanceToTarget <= SightRange)
+        {
+            isProvoked = true;
+            // navMeshAgent.SetDestination(target.position);
+        }
+
+    }
+
+    private void EngageTarget()
+    {
+        if(_distanceToTarget >= navMeshAgent.stoppingDistance)
+        {
+            ChaseTarget();
+        }
+        if(_distanceToTarget <= navMeshAgent.stoppingDistance)
+        {
+            AttackTarget();
+        }
+    }
+
+    private void ChaseTarget()
+    {
+        navMeshAgent.SetDestination(target.position);
+    }
+
+    private void AttackTarget()
+    {
+        Debug.Log(name + " is being attacked by " + target);
     }
 
     void OnDrawGizmosSelected()

@@ -11,5 +11,10 @@ public class EnemyHealth : MonoBehaviour
     {
         hitpoints -= damage;
         Debug.Log(hitpoints);
+
+        if(hitpoints <=0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

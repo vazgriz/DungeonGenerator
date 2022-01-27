@@ -210,11 +210,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7bf0343fd696944935e3c6bd8e7971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FPCamera: {fileID: 0}
+  FPCamera: {fileID: 1327793585}
   Range: 100
 --- !u!4 &1222296695 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1336994966329576201, guid: 803ced248e3549b4eab6a0ad05639f16,
+    type: 3}
+  m_PrefabInstance: {fileID: 785637646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1327793585 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1336994966330135819, guid: 803ced248e3549b4eab6a0ad05639f16,
     type: 3}
   m_PrefabInstance: {fileID: 785637646}
   m_PrefabAsset: {fileID: 0}

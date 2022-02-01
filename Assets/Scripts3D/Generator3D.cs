@@ -5,6 +5,7 @@ using Graphs;
 using System.Linq;
 using Assets.Level.Models;
 using Assets.Level.Builders;
+using System;
 
 public class Generator3D : MonoBehaviour {
 
@@ -40,6 +41,12 @@ public class Generator3D : MonoBehaviour {
 
         PlaceRooms();
         var delaunay = Triangulate();
+
+        if (!delaunay.Edges.Any())
+        {
+            throw new Exception("Level generation parameters resulted in delaunay with 0 edges. Try increasing room count or decreasing room max size");
+        }
+
         CreateHallways(delaunay);
         var (hallways, staircases) = PathfindHallways();
 

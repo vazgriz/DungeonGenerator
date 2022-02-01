@@ -28,7 +28,12 @@ namespace Assets.Level.Builders
                 south: (0.5, 0, 1) rotate 0 about y
                 west: (1, 0, 0.5) rotate 90 about y
              * 
+             * If staircase is going down in the given compass direction, the prefab needs to be
+             *   - rotated 180 about y
+             *   - moved 2f in given compass direction to offset movement from non centered rotation
+             *   - lowered (-y)
              */
+
             var location = staircase.Previous + staircase.HorizontalOffset;
             var placedStaircase = Instantiate(_staircase, location, Quaternion.identity);
 

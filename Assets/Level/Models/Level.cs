@@ -15,6 +15,5 @@ namespace Assets.Level.Models
         public ICollection<Room> Rooms { get; }
         public ICollection<Hallway> Hallways { get; }
         public ICollection<Staircase> Staircases { get; }
-    
     }
 }

@@ -53,10 +53,7 @@ public class Generator3D : MonoBehaviour {
         var level = new Level(rooms, hallways, staircases);
         _levelBuilder.Build(level);
 
-        Debug.Log($"***** GENERATED LEVEL WITH {level.Rooms.Count} ROOMS ***** ");
-        Debug.Log($"***** GENERATED LEVEL WITH {level.Hallways.Count} HALLWAYS ***** ");
-        Debug.Log($"***** GENERATED LEVEL WITH {level.Staircases.Count} STAIRCASES ***** ");
-        Debug.Log($"There were {numNotAdded} rooms not added");
+        Debug.Log($"Generated level with {level.Rooms.Count} Rooms, {level.Hallways.Count} Hallways, {level.Staircases.Count} Staircases");        
     }
 
     void PlaceRooms() {
@@ -91,7 +88,6 @@ public class Generator3D : MonoBehaviour {
             }
 
             if (add) {
-                _levelBuilder.PlaceRoom(newRoom.Bounds.position, newRoom.Bounds.size);
                 rooms.Add(newRoom);
 
                 foreach (var pos in newRoom.Bounds.allPositionsWithin) {
@@ -247,7 +243,6 @@ public class Generator3D : MonoBehaviour {
                         grid[prev + verticalOffset + horizontalOffset] = CellType.Stairs;
                         grid[prev + verticalOffset + horizontalOffset * 2] = CellType.Stairs;
 
-                        _levelBuilder.PlaceStairSet(prev, verticalOffset, horizontalOffset);
                         var staircase = new Staircase(prev, verticalOffset, horizontalOffset);
                         staircases.Add(staircase);
                             
@@ -280,9 +275,7 @@ public class Generator3D : MonoBehaviour {
                         previousPiece.Next = piece.Location;
                     }
                     previousPiece = piece;
-                    _levelBuilder.PlaceHallway(piece.Location);
                 }
-
             }
 
             hallways.Add(hallway);

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] float hitpoints = 100f;
+    public bool IsDead = false;
     // Start is called before the first frame update
 
     public void TakeDamage(float damage)
@@ -14,7 +15,7 @@ public class EnemyHealth : MonoBehaviour
 
         if(hitpoints <=0)
         {
-            GetComponent<Animator>().SetTrigger("Death");
+            IsDead = true;
             // Destroy(gameObject);
         }
     }

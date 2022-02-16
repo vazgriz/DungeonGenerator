@@ -14,7 +14,8 @@ public class EnemyHealth : MonoBehaviour
 
         if(hitpoints <=0)
         {
-            Destroy(gameObject);
+            GetComponent<Animator>().SetTrigger("Death");
+            // Destroy(gameObject);
         }
     }
 }

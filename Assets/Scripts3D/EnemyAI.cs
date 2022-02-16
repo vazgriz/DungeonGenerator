@@ -12,6 +12,9 @@ public class EnemyAI : MonoBehaviour
     private float _distanceToTarget;
     bool isProvoked = false;
 
+    public float timeBetweenAttacks = 2f;
+    private bool IsAttacking = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,17 +47,36 @@ public class EnemyAI : MonoBehaviour
         if(_distanceToTarget <= navMeshAgent.stoppingDistance)
         {
             AttackTarget();
+            Debug.Log(name + " is within stopping distance");
+
         }
     }
 
     private void ChaseTarget()
     {
+        GetComponent<Animator>().SetTrigger("Move");
         navMeshAgent.SetDestination(target.position);
     }
 
     private void AttackTarget()
     {
+        IsAttacking = true;
+        GetComponent<Animator>().ResetTrigger("Move");
+        StartCoroutine("AttackType", timeBetweenAttacks);
         Debug.Log(name + " is being attacked by " + target);
+    }
+
+    private IEnumerator AttackType(float timeBetweenAttacks)
+    {
+        while(true)
+        {
+            GetComponent<Animator>().SetTrigger("Attack - Left");
+            yield return new WaitForSeconds(timeBetweenAttacks);
+            GetComponent<Animator>().ResetTrigger("Attack - Left");
+            GetComponent<Animator>().SetTrigger("Attack - Right");
+            yield return new WaitForSeconds(timeBetweenAttacks);
+            GetComponent<Animator>().ResetTrigger("Attack - Right");
+        }
     }
 
     void OnDrawGizmosSelected()

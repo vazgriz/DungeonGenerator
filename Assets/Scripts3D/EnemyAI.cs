@@ -15,16 +15,18 @@ public class EnemyAI : MonoBehaviour
     public float timeBetweenAttacks = 2f;
     private bool IsAttacking = false;
 
+    EnemyHealth EnemyHealth;
+
     // Start is called before the first frame update
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        EnemyHealth = GetComponent<EnemyHealth>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
         _distanceToTarget = Vector3.Distance(target.position, transform.position);
         if(isProvoked)
         {
@@ -35,7 +37,17 @@ public class EnemyAI : MonoBehaviour
             isProvoked = true;
             // navMeshAgent.SetDestination(target.position);
         }
+        
+        if(EnemyHealth.IsDead)
+        {
+            Death();
+        }
 
+    }
+
+    private void Idle()
+    {
+        GetComponent<Animator>().SetTrigger("Idle");
     }
 
     private void EngageTarget()
@@ -48,7 +60,6 @@ public class EnemyAI : MonoBehaviour
         {
             AttackTarget();
             Debug.Log(name + " is within stopping distance");
-
         }
     }
 
@@ -77,6 +88,12 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenAttacks);
             GetComponent<Animator>().ResetTrigger("Attack - Right");
         }
+    }
+
+    private void Death()
+    {
+        GetComponent<Animator>().SetTrigger("Death");
+        Destroy(navMeshAgent);
     }
 
     void OnDrawGizmosSelected()

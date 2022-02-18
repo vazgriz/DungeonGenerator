@@ -15,7 +15,7 @@ public class EnemyAI : MonoBehaviour
     public float timeBetweenAttacks = 2f;
     private bool IsAttacking = false;
 
-    public float timeInDeathAnim = 2f;
+    public float timeInDeathAnim = 0.1f;
 
     EnemyHealth EnemyHealth;
     Animator EnemyAnimator;
@@ -35,8 +35,6 @@ public class EnemyAI : MonoBehaviour
         if(isProvoked)
         {
             EngageTarget();
-
-            Debug.Log("Engaging ", target);
         }
         else if(_distanceToTarget <= SightRange)
         {
@@ -46,9 +44,9 @@ public class EnemyAI : MonoBehaviour
         
         if(EnemyHealth.IsDead)
         {
+            Debug.Log("Time to die");
             StartCoroutine("Death", timeInDeathAnim);
         }
-
     }
 
     private void Idle()
@@ -65,7 +63,6 @@ public class EnemyAI : MonoBehaviour
         if(_distanceToTarget <= navMeshAgent.stoppingDistance)
         {
             AttackTarget();
-            Debug.Log(name + " is within stopping distance");
         }
     }
 
@@ -80,7 +77,6 @@ public class EnemyAI : MonoBehaviour
         IsAttacking = true;
         EnemyAnimator.ResetTrigger("Move");
         StartCoroutine("AttackType", timeBetweenAttacks);
-        Debug.Log(name + " is being attacked by " + target);
     }
 
     private IEnumerator AttackType(float timeBetweenAttacks)
@@ -101,9 +97,9 @@ public class EnemyAI : MonoBehaviour
         while(true)
         {
             EnemyAnimator.SetTrigger("Death");
-            // Destroy(navMeshAgent);
             yield return new WaitForSeconds(timeInDeathAnim);
             EnemyAnimator.enabled = false;
+            // Destroy(navMeshAgent);
         }
     }
 

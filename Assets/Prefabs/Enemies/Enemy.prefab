@@ -92,8 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   SightRange: 5
+  WalkingSpeed: 1.85
   timeBetweenAttacks: 2
-  timeInDeathAnim: 2
 --- !u!195 &970478692
 NavMeshAgent:
   m_ObjectHideFlags: 0

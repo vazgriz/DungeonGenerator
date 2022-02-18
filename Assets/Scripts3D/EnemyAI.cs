@@ -11,11 +11,12 @@ public class EnemyAI : MonoBehaviour
     public float SightRange = 5.0f;
     private float _distanceToTarget;
     bool isProvoked = false;
+    public float WalkingSpeed = 1f;
 
     public float timeBetweenAttacks = 2f;
     private bool IsAttacking = false;
 
-    public float timeInDeathAnim = 0.1f;
+    private float timeInDeathAnim = 1.73f;
 
     EnemyHealth EnemyHealth;
     Animator EnemyAnimator;
@@ -26,6 +27,11 @@ public class EnemyAI : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         EnemyHealth = GetComponent<EnemyHealth>();
         EnemyAnimator = GetComponent<Animator>();
+
+        foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = true;
+
+        navMeshAgent.speed = WalkingSpeed;
+
     }
 
     // Update is called once per frame
@@ -45,7 +51,7 @@ public class EnemyAI : MonoBehaviour
         if(EnemyHealth.IsDead)
         {
             Debug.Log("Time to die");
-            StartCoroutine("Death", timeInDeathAnim);
+            StartCoroutine("Death");
         }
     }
 
@@ -92,14 +98,19 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private IEnumerator Death(float timeInDeathAnim)
+    private IEnumerator Death()
     {
         while(true)
         {
+            Destroy(navMeshAgent);
+            Debug.Log("death started");
             EnemyAnimator.SetTrigger("Death");
             yield return new WaitForSeconds(timeInDeathAnim);
             EnemyAnimator.enabled = false;
-            // Destroy(navMeshAgent);
+            Debug.Log("animator turned off");
+            foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = false;
+            Destroy(this);
+            yield return null;
         }
     }
 

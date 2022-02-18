@@ -15,13 +15,17 @@ public class EnemyAI : MonoBehaviour
     public float timeBetweenAttacks = 2f;
     private bool IsAttacking = false;
 
+    public float timeInDeathAnim = 2f;
+
     EnemyHealth EnemyHealth;
+    Animator EnemyAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         EnemyHealth = GetComponent<EnemyHealth>();
+        EnemyAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -31,6 +35,8 @@ public class EnemyAI : MonoBehaviour
         if(isProvoked)
         {
             EngageTarget();
+
+            Debug.Log("Engaging ", target);
         }
         else if(_distanceToTarget <= SightRange)
         {
@@ -40,14 +46,14 @@ public class EnemyAI : MonoBehaviour
         
         if(EnemyHealth.IsDead)
         {
-            Death();
+            StartCoroutine("Death", timeInDeathAnim);
         }
 
     }
 
     private void Idle()
     {
-        GetComponent<Animator>().SetTrigger("Idle");
+        EnemyAnimator.SetTrigger("Idle");
     }
 
     private void EngageTarget()
@@ -65,14 +71,14 @@ public class EnemyAI : MonoBehaviour
 
     private void ChaseTarget()
     {
-        GetComponent<Animator>().SetTrigger("Move");
+        EnemyAnimator.SetTrigger("Move");
         navMeshAgent.SetDestination(target.position);
     }
 
     private void AttackTarget()
     {
         IsAttacking = true;
-        GetComponent<Animator>().ResetTrigger("Move");
+        EnemyAnimator.ResetTrigger("Move");
         StartCoroutine("AttackType", timeBetweenAttacks);
         Debug.Log(name + " is being attacked by " + target);
     }
@@ -81,19 +87,24 @@ public class EnemyAI : MonoBehaviour
     {
         while(true)
         {
-            GetComponent<Animator>().SetTrigger("Attack - Left");
+            EnemyAnimator.SetTrigger("Attack - Left");
             yield return new WaitForSeconds(timeBetweenAttacks);
-            GetComponent<Animator>().ResetTrigger("Attack - Left");
-            GetComponent<Animator>().SetTrigger("Attack - Right");
+            EnemyAnimator.ResetTrigger("Attack - Left");
+            EnemyAnimator.SetTrigger("Attack - Right");
             yield return new WaitForSeconds(timeBetweenAttacks);
-            GetComponent<Animator>().ResetTrigger("Attack - Right");
+            EnemyAnimator.ResetTrigger("Attack - Right");
         }
     }
 
-    private void Death()
+    private IEnumerator Death(float timeInDeathAnim)
     {
-        GetComponent<Animator>().SetTrigger("Death");
-        Destroy(navMeshAgent);
+        while(true)
+        {
+            EnemyAnimator.SetTrigger("Death");
+            // Destroy(navMeshAgent);
+            yield return new WaitForSeconds(timeInDeathAnim);
+            EnemyAnimator.enabled = false;
+        }
     }
 
     void OnDrawGizmosSelected()

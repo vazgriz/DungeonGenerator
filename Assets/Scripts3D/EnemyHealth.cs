@@ -16,7 +16,6 @@ public class EnemyHealth : MonoBehaviour
         if(hitpoints <=0)
         {
             IsDead = true;
-            // Destroy(gameObject);
         }
     }
 }

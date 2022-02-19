@@ -5,21 +5,32 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    // Navmesh
     NavMeshAgent navMeshAgent;
 
+    // AI params
+    [SerializeField] Transform target;
     public float SightRange = 5.0f;
     private float _distanceToTarget;
     bool isProvoked = false;
-    public float WalkingSpeed = 1f;
-
     public float timeBetweenAttacks = 2f;
     private bool IsAttacking = false;
 
-    private float timeInDeathAnim = 1.73f;
+    // Attack params
+    // Light attacks
+    [SerializeField] float Range = 20f;
+    [SerializeField] float damage = 20f;
 
+    // Health & Animator
     EnemyHealth EnemyHealth;
     Animator EnemyAnimator;
+
+    // Movement
+    public float WalkingSpeed = 1f;
+
+    // Death params
+    private float timeInDeathAnim = 1.73f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +42,6 @@ public class EnemyAI : MonoBehaviour
         foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = true;
 
         navMeshAgent.speed = WalkingSpeed;
-
     }
 
     // Update is called once per frame
@@ -103,11 +113,9 @@ public class EnemyAI : MonoBehaviour
         while(true)
         {
             Destroy(navMeshAgent);
-            Debug.Log("death started");
             EnemyAnimator.SetTrigger("Death");
             yield return new WaitForSeconds(timeInDeathAnim);
             EnemyAnimator.enabled = false;
-            Debug.Log("animator turned off");
             foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = false;
             Destroy(this);
             yield return null;

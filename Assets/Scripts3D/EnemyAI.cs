@@ -61,7 +61,6 @@ public class EnemyAI : MonoBehaviour
         
         if(EnemyHealth.IsDead)
         {
-            Debug.Log("Time to die");
             StartCoroutine("Death");
         }
     }
@@ -89,32 +88,34 @@ public class EnemyAI : MonoBehaviour
         navMeshAgent.SetDestination(target.position);
     }
 
+    // Animation triggers - consider moving to another file!
+
     private void AttackTarget()
     {
         IsAttacking = true;
-        EnemyAnimator.ResetTrigger("Move");
-        StartCoroutine("AttackType", timeBetweenAttacks);
+        StartCoroutine("AttackAnim", timeBetweenAttacks);
 
-        if(target == null) return;
-        target.GetComponent<PlayerHealth>().TakeDamage(damage);
-        Debug.Log("Enemy damaged player");
+        // if(target == null) return;
+        // target.GetComponent<PlayerHealth>().TakeDamage(damage);
+        // Debug.Log("Enemy damaged player");
     }
 
-    private IEnumerator AttackType(float timeBetweenAttacks)
+    private IEnumerator AttackAnim(float timeBetweenAttacks)
     {
         RaycastHit hit;
 
         while(true)
         {
+            EnemyAnimator.ResetTrigger("Move");
+
             if(Physics.Raycast(transform.position, transform.forward, out hit, Range))
             {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                Debug.Log("enemy is hitting " + hit.transform.name);
+                // Debug.Log("enemy is hitting " + hit.transform.name);
             }
             EnemyAnimator.SetTrigger("Attack - Left");
             yield return new WaitForSeconds(timeBetweenAttacks);
             EnemyAnimator.ResetTrigger("Attack - Left");
-
 
             // EnemyAnimator.SetTrigger("Attack - Right");
             // yield return new WaitForSeconds(timeBetweenAttacks);

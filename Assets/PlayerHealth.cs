@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
 
-    public float Health = 100f;
+    [SerializeField] float hitPoints = 100f;
 
     // Start is called before the first frame update
     void Start()
@@ -19,14 +19,10 @@ public class PlayerHealth : MonoBehaviour
         
     }
 
-    void TakeDamage()
+    public void TakeDamage(float damage)
     {
-
-    }
-
-    void Death()
-    {
-        if (Health <= 0)
+        hitPoints -= damage;
+        if (hitPoints <= 0)
         {
             Debug.Log("Player is dead");
         }

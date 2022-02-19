@@ -9,7 +9,7 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent navMeshAgent;
 
     // AI params
-    [SerializeField] Transform target;
+    private Transform target;
     public float SightRange = 5.0f;
     private float _distanceToTarget;
     bool isProvoked = false;
@@ -31,10 +31,11 @@ public class EnemyAI : MonoBehaviour
     // Death params
     private float timeInDeathAnim = 1.73f;
 
-
     // Start is called before the first frame update
     void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+
         navMeshAgent = GetComponent<NavMeshAgent>();
         EnemyHealth = GetComponent<EnemyHealth>();
         EnemyAnimator = GetComponent<Animator>();
@@ -93,18 +94,31 @@ public class EnemyAI : MonoBehaviour
         IsAttacking = true;
         EnemyAnimator.ResetTrigger("Move");
         StartCoroutine("AttackType", timeBetweenAttacks);
+
+        if(target == null) return;
+        target.GetComponent<PlayerHealth>().TakeDamage(damage);
+        Debug.Log("Enemy damaged player");
     }
 
     private IEnumerator AttackType(float timeBetweenAttacks)
     {
+        RaycastHit hit;
+
         while(true)
         {
+            if(Physics.Raycast(transform.position, transform.forward, out hit, Range))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                Debug.Log("enemy is hitting " + hit.transform.name);
+            }
             EnemyAnimator.SetTrigger("Attack - Left");
             yield return new WaitForSeconds(timeBetweenAttacks);
             EnemyAnimator.ResetTrigger("Attack - Left");
-            EnemyAnimator.SetTrigger("Attack - Right");
-            yield return new WaitForSeconds(timeBetweenAttacks);
-            EnemyAnimator.ResetTrigger("Attack - Right");
+
+
+            // EnemyAnimator.SetTrigger("Attack - Right");
+            // yield return new WaitForSeconds(timeBetweenAttacks);
+            // EnemyAnimator.ResetTrigger("Attack - Right");
         }
     }
 

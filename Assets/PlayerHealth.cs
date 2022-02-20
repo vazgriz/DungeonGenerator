@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
 
-    [SerializeField] float hitPoints = 100f;
+    public float hitPoints = 100f;
 
     // Start is called before the first frame update
     void Start()

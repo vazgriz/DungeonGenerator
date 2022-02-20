@@ -9,21 +9,18 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent navMeshAgent;
 
     // AI params
-    private Transform target;
-    public float SightRange = 5.0f;
+    public Transform target;
+    public float SightRange = 10f;
     private float _distanceToTarget;
-    bool isProvoked = false;
+    bool isProvoked;
     public float timeBetweenAttacks = 2f;
-    private bool IsAttacking = false;
-
-    // Attack params
-    // Light attacks
-    [SerializeField] float Range = 20f;
-    [SerializeField] float damage = 20f;
 
     // Health & Animator
     EnemyHealth EnemyHealth;
     Animator EnemyAnimator;
+
+    // Damage dealer
+    public float damage = 20f;
 
     // Movement
     public float WalkingSpeed = 1f;
@@ -47,7 +44,7 @@ public class EnemyAI : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         _distanceToTarget = Vector3.Distance(target.position, transform.position);
         if(isProvoked)
         {
@@ -56,6 +53,7 @@ public class EnemyAI : MonoBehaviour
         else if(_distanceToTarget <= SightRange)
         {
             isProvoked = true;
+            Debug.Log("within sight");
             // navMeshAgent.SetDestination(target.position);
         }
         
@@ -75,10 +73,12 @@ public class EnemyAI : MonoBehaviour
         if(_distanceToTarget >= navMeshAgent.stoppingDistance)
         {
             ChaseTarget();
+            Debug.Log("Out of attack range");
         }
         if(_distanceToTarget <= navMeshAgent.stoppingDistance)
         {
             AttackTarget();
+            Debug.Log("In attack range");
         }
     }
 
@@ -92,8 +92,10 @@ public class EnemyAI : MonoBehaviour
 
     private void AttackTarget()
     {
-        IsAttacking = true;
+        EnemyAnimator.ResetTrigger("Move");
         StartCoroutine("AttackAnim", timeBetweenAttacks);
+
+        navMeshAgent.SetDestination(transform.position);
 
         // if(target == null) return;
         // target.GetComponent<PlayerHealth>().TakeDamage(damage);
@@ -106,21 +108,22 @@ public class EnemyAI : MonoBehaviour
 
         while(true)
         {
-            EnemyAnimator.ResetTrigger("Move");
-
-            if(Physics.Raycast(transform.position, transform.forward, out hit, Range))
-            {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                // Debug.Log("enemy is hitting " + hit.transform.name);
-            }
             EnemyAnimator.SetTrigger("Attack - Left");
             yield return new WaitForSeconds(timeBetweenAttacks);
             EnemyAnimator.ResetTrigger("Attack - Left");
+            yield return null;
 
             // EnemyAnimator.SetTrigger("Attack - Right");
             // yield return new WaitForSeconds(timeBetweenAttacks);
             // EnemyAnimator.ResetTrigger("Attack - Right");
         }
+    }
+
+    public void AttackHitEvent()
+    {
+        // if (target = null) return;
+        target.GetComponent<PlayerHealth>().TakeDamage(damage);
+        Debug.Log("Player health is " + GetComponent<PlayerHealth>().hitPoints);
     }
 
     private IEnumerator Death()

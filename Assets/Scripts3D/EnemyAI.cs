@@ -27,6 +27,7 @@ public class EnemyAI : MonoBehaviour
 
     // Death params
     private float timeInDeathAnim = 1.73f;
+    private float timeUntilDeadEnemyDisappears = 3f;
 
     // Start is called before the first frame update
     void Start()
@@ -85,7 +86,10 @@ public class EnemyAI : MonoBehaviour
     private void ChaseTarget()
     {
         EnemyAnimator.SetTrigger("Move");
-        navMeshAgent.SetDestination(target.position);
+        if(target != null)
+        {
+            navMeshAgent.SetDestination(target.position);
+        }
     }
 
     // Animation triggers - consider moving to another file!
@@ -94,8 +98,10 @@ public class EnemyAI : MonoBehaviour
     {
         EnemyAnimator.ResetTrigger("Move");
         StartCoroutine("AttackAnim", timeBetweenAttacks);
-
-        navMeshAgent.SetDestination(transform.position);
+        if(target != null)
+        {
+            navMeshAgent.SetDestination(transform.position);
+        }
 
         // if(target == null) return;
         // target.GetComponent<PlayerHealth>().TakeDamage(damage);
@@ -121,21 +127,21 @@ public class EnemyAI : MonoBehaviour
 
     public void AttackHitEvent()
     {
-        // if (target = null) return;
+        Debug.Log(target);
         target.GetComponent<PlayerHealth>().TakeDamage(damage);
-        Debug.Log("Player health is " + GetComponent<PlayerHealth>().hitPoints);
     }
 
     private IEnumerator Death()
     {
         while(true)
         {
-            Destroy(navMeshAgent);
+            navMeshAgent.enabled = false;
             EnemyAnimator.SetTrigger("Death");
             yield return new WaitForSeconds(timeInDeathAnim);
             EnemyAnimator.enabled = false;
             foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = false;
-            Destroy(this);
+            yield return new WaitForSeconds(timeUntilDeadEnemyDisappears);
+            Destroy(gameObject);
             yield return null;
         }
     }

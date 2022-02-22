@@ -452,6 +452,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1336994966329153325, guid: 803ced248e3549b4eab6a0ad05639f16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1336994966329153327, guid: 803ced248e3549b4eab6a0ad05639f16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1336994966329576201, guid: 803ced248e3549b4eab6a0ad05639f16,
         type: 3}
       propertyPath: m_RootOrder
@@ -507,6 +517,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4974600459884732427, guid: 803ced248e3549b4eab6a0ad05639f16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1859198456, guid: 803ced248e3549b4eab6a0ad05639f16, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 803ced248e3549b4eab6a0ad05639f16, type: 3}
@@ -528,6 +543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7035692de01d7df4c935dd1129d2806d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 963658346}
+  playerMovement: {fileID: 0}
   sceneLoader: {fileID: 1425491991}
   deathHandler: {fileID: 1425491990}
   hitPoints: 100
@@ -794,6 +811,12 @@ Transform:
   m_Father: {fileID: 1217430274}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: -90}
+--- !u!1 &963658346 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4974600459884732427, guid: 803ced248e3549b4eab6a0ad05639f16,
+    type: 3}
+  m_PrefabInstance: {fileID: 785637646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1217430273
 GameObject:
   m_ObjectHideFlags: 0

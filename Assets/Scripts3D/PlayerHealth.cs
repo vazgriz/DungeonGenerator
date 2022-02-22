@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [SerializeField] GameObject weapon; 
+    UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController playerMovement; 
     [SerializeField] SceneLoader sceneLoader;
     [SerializeField] DeathHandler deathHandler;
     public float hitPoints = 100f;
@@ -11,7 +13,7 @@ public class PlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerMovement = GetComponent<UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController>();
     }
 
     // Update is called once per frame
@@ -28,6 +30,8 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Player is dead");
             deathHandler.HandleDeath();
+            Destroy(weapon);
+            Destroy(playerMovement);
         }
     }
 }

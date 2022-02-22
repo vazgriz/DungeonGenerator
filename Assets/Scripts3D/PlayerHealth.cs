@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-
+    [SerializeField] SceneLoader sceneLoader;
+    [SerializeField] DeathHandler deathHandler;
     public float hitPoints = 100f;
 
     // Start is called before the first frame update
@@ -26,6 +27,7 @@ public class PlayerHealth : MonoBehaviour
         if (hitPoints <= 0)
         {
             Debug.Log("Player is dead");
+            deathHandler.HandleDeath();
         }
     }
 }

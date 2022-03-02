@@ -26,9 +26,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        return;
         bool isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
-        if(isGrounded && _velocity.y < 0)
+        if (isGrounded && _velocity.y < 0)
         {
             _velocity.y = -MovementSpeed;
         }
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
         Controller.Move(move * Speed * Time.deltaTime);
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             _velocity.y = Mathf.Sqrt(JumpHeight * -MovementSpeed * Gravity);
         }

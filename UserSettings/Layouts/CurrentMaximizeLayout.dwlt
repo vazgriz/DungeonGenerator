@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 7744
+  controlID: 8432
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 7745
+  controlID: 8433
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 7746
+  controlID: 8404
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -744,22 +744,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/SampleScenes
+    - Assets/Standard Assets/Editor
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/SampleScenes
+  - Assets/Standard Assets/Editor
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\James Schiele\Documents\GitHub\DungeonGenerator
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 170.99997}
-    m_SelectedIDs: a0540000
-    m_LastClickedID: 21664
-    m_ExpandedIDs: 000000006a5400009c540000a0540000a65400006456000066560000685600002e660000aa6b0000c66b000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 442.99997}
+    m_SelectedIDs: 0aac0000
+    m_LastClickedID: 44042
+    m_ExpandedIDs: 000000006a540000a65400006456000066560000685600006a560000aa6b0000c66b000082a9000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -787,7 +787,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a6540000645600006656000068560000aa6b0000c66b000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000a65400006456000066560000685600006a560000aa6b0000c66b00007ca8000082a9000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

@@ -22,7 +22,6 @@ public class Weapon : MonoBehaviour
     public void PlayMuzzleFlash()
     {
         MuzzleFlash.Play();
-        Debug.Log("Muzzle Flash");
     }
 
     private void Shoot()
@@ -31,7 +30,8 @@ public class Weapon : MonoBehaviour
         if(Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, Range))
         {
             // Debug.Log(hit.transform.name + " has been shot");
-            EnemyHealth target = hit.transform.GetComponent<EnemyHealth>();
+            Debug.DrawRay(transform.position, FPCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            EnemyHealth target = hit.transform.GetComponentInParent<EnemyHealth>();
             if(target == null)
             {
                 return;
@@ -45,6 +45,5 @@ public class Weapon : MonoBehaviour
         }
 
 
-        Debug.DrawRay(transform.position, FPCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
     }
 }

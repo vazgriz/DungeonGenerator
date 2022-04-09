@@ -6,60 +6,61 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     // Navmesh
-    NavMeshAgent navMeshAgent;
+    private NavMeshAgent _navMeshAgent;
 
     // AI params
-    private Transform target;
-    public float SightRange = 5.0f;
+    public Transform Target;
+    public float SightRange = 10f;
+    public float TimeBetweenAttacks = 2f;
     private float _distanceToTarget;
-    bool isProvoked = false;
-    public float timeBetweenAttacks = 2f;
-    private bool IsAttacking = false;
-
-    // Attack params
-    // Light attacks
-    [SerializeField] float Range = 20f;
-    [SerializeField] float damage = 20f;
+    private bool _isProvoked;
 
     // Health & Animator
-    EnemyHealth EnemyHealth;
-    Animator EnemyAnimator;
+    private EnemyHealth _enemyHealth;
+    private Animator _enemyAnimator;
+
+    // Damage dealer
+    public float Damage = 20f;
 
     // Movement
     public float WalkingSpeed = 1f;
 
     // Death params
-    private float timeInDeathAnim = 1.73f;
+    private float _timeInDeathAnim = 1.73f;
+    private float _timeUntilDeadEnemyDisappears = 3f;
 
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        Target = GameObject.FindGameObjectWithTag("Player").transform;
 
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        EnemyHealth = GetComponent<EnemyHealth>();
-        EnemyAnimator = GetComponent<Animator>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _enemyHealth = GetComponent<EnemyHealth>();
+        _enemyAnimator = GetComponent<Animator>();
 
-        foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = true;
+        foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
+        {
+            rb.isKinematic = true;
+        }
 
-        navMeshAgent.speed = WalkingSpeed;
+        _navMeshAgent.speed = WalkingSpeed;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        _distanceToTarget = Vector3.Distance(target.position, transform.position);
-        if(isProvoked)
+    {        
+        _distanceToTarget = Vector3.Distance(Target.position, transform.position);
+        if (_isProvoked)
         {
             EngageTarget();
         }
-        else if(_distanceToTarget <= SightRange)
+        else if (_distanceToTarget <= SightRange)
         {
-            isProvoked = true;
-            // navMeshAgent.SetDestination(target.position);
+            _isProvoked = true;
+            Debug.Log("within sight");
         }
         
-        if(EnemyHealth.IsDead)
+        if (_enemyHealth.IsDead)
         {
             StartCoroutine("Death");
         }
@@ -67,37 +68,42 @@ public class EnemyAI : MonoBehaviour
 
     private void Idle()
     {
-        EnemyAnimator.SetTrigger("Idle");
+        _enemyAnimator.SetTrigger("Idle");
     }
 
     private void EngageTarget()
     {
-        if(_distanceToTarget >= navMeshAgent.stoppingDistance)
+        if (_distanceToTarget >= _navMeshAgent.stoppingDistance)
         {
             ChaseTarget();
+            Debug.Log("Out of attack range");
         }
-        if(_distanceToTarget <= navMeshAgent.stoppingDistance)
+        if (_distanceToTarget <= _navMeshAgent.stoppingDistance)
         {
             AttackTarget();
+            Debug.Log("In attack range");
         }
     }
 
     private void ChaseTarget()
     {
-        EnemyAnimator.SetTrigger("Move");
-        navMeshAgent.SetDestination(target.position);
+        _enemyAnimator.SetTrigger("Move");
+        if (Target != null)
+        {
+            _navMeshAgent.SetDestination(Target.position);
+        }
     }
 
     // Animation triggers - consider moving to another file!
 
     private void AttackTarget()
     {
-        IsAttacking = true;
-        StartCoroutine("AttackAnim", timeBetweenAttacks);
-
-        // if(target == null) return;
-        // target.GetComponent<PlayerHealth>().TakeDamage(damage);
-        // Debug.Log("Enemy damaged player");
+        _enemyAnimator.ResetTrigger("Move");
+        StartCoroutine("AttackAnim", TimeBetweenAttacks);
+        if (Target != null)
+        {
+            _navMeshAgent.SetDestination(transform.position);
+        }
     }
 
     private IEnumerator AttackAnim(float timeBetweenAttacks)
@@ -106,33 +112,37 @@ public class EnemyAI : MonoBehaviour
 
         while(true)
         {
-            EnemyAnimator.ResetTrigger("Move");
-
-            if(Physics.Raycast(transform.position, transform.forward, out hit, Range))
-            {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                // Debug.Log("enemy is hitting " + hit.transform.name);
-            }
-            EnemyAnimator.SetTrigger("Attack - Left");
+            _enemyAnimator.SetTrigger("Attack - Left");
             yield return new WaitForSeconds(timeBetweenAttacks);
-            EnemyAnimator.ResetTrigger("Attack - Left");
-
-            // EnemyAnimator.SetTrigger("Attack - Right");
-            // yield return new WaitForSeconds(timeBetweenAttacks);
-            // EnemyAnimator.ResetTrigger("Attack - Right");
+            _enemyAnimator.ResetTrigger("Attack - Left");
+            yield return null;
         }
+    }
+
+    public void AttackHitEvent()
+    {
+        Debug.Log(Target);
+        Target.GetComponent<PlayerHealth>().TakeDamage(Damage);
     }
 
     private IEnumerator Death()
     {
-        while(true)
+        while (true)
         {
-            Destroy(navMeshAgent);
-            EnemyAnimator.SetTrigger("Death");
-            yield return new WaitForSeconds(timeInDeathAnim);
-            EnemyAnimator.enabled = false;
-            foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) rb.isKinematic = false;
-            Destroy(this);
+            _navMeshAgent.enabled = false;
+            _enemyAnimator.SetTrigger("Death");
+            yield return new WaitForSeconds(_timeInDeathAnim);
+
+            _enemyAnimator.enabled = false;
+
+            foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
+            {
+                rb.isKinematic = false;
+            }
+
+            yield return new WaitForSeconds(_timeUntilDeadEnemyDisappears);
+
+            Destroy(gameObject);
             yield return null;
         }
     }

@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Levels/FirstPersonMovementTest/FirstPersonMovementTest.unity
+    guid: 689190677e5a8ce48af2b4a418a16b15
   m_configObjects: {}

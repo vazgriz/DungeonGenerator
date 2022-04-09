@@ -91,9 +91,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  SightRange: 5
-  WalkingSpeed: 1.85
+  SightRange: 10
   timeBetweenAttacks: 2
+  damage: 100
+  WalkingSpeed: 1.5
 --- !u!195 &970478692
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -108,7 +109,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 2.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

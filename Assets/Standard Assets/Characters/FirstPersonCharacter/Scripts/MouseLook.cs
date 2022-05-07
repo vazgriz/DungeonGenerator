@@ -30,6 +30,7 @@ public class MouseLook : MonoBehaviour
     {
         _currentVelocity = GetDesiredVelocity();
         _currentRotation += _currentVelocity * Time.deltaTime;
+        _currentRotation.y = ClampVerticalAngle(_currentRotation.y);
     }
 
     private Vector2 GetDesiredVelocity()
@@ -58,5 +59,10 @@ public class MouseLook : MonoBehaviour
 
         bool InputIsNonZero() => !(Mathf.Approximately(0, input.x) && Mathf.Approximately(0, input.y));
         bool InputLagTimeHasElapsed() => _inputLagTimer > InputLagPeriod;
+    }
+
+    private float ClampVerticalAngle(float angle)
+    {
+        return Mathf.Clamp(angle, -90, 90);
     }
 }

@@ -1,7 +1,16 @@
+using System;
 using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
+    [Flags]
+    public enum RotationDirection
+    {
+        None,
+        Horizontal = 1 << 0,
+        Vertical = 1 << 1
+    }
+
     [Tooltip("A multiplier to the input. Describes the maximum speed in degrees/second. To flip vertical rotation, set Y to a negative value")]
     [SerializeField]
     private Vector2 Sensitivity;
@@ -13,6 +22,10 @@ public class MouseLook : MonoBehaviour
     [Tooltip("The period to wait until resetting the input value. Should be set as low as possible while avoiding stuttering")]
     [SerializeField]
     private float InputLagPeriod;
+
+    [Tooltip("Which directions this object can rotate")]
+    [SerializeField]
+    private RotationDirection _rotationDirections;
 
     private Vector2 _currentRotation;
     private Vector2 _currentVelocity;
@@ -73,6 +86,17 @@ public class MouseLook : MonoBehaviour
     private Vector2 GetDesiredVelocity()
     {
         var maximumVelocity = GetInputVector() * Sensitivity;
+
+        if ((_rotationDirections & RotationDirection.Horizontal) == 0)
+        {
+            maximumVelocity.x = 0;
+        }
+
+        if ((_rotationDirections & RotationDirection.Vertical) == 0)
+        {
+            maximumVelocity.y = 0;
+        }
+
         return new Vector2(
             Mathf.MoveTowards(_currentVelocity.x, maximumVelocity.x, Acceleration.x * Time.deltaTime),
             Mathf.MoveTowards(_currentVelocity.y, maximumVelocity.y, Acceleration.y * Time.deltaTime));

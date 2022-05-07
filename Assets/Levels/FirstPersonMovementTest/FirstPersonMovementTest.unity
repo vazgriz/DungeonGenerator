@@ -440,6 +440,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &600424074 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1336994966329153327, guid: 803ced248e3549b4eab6a0ad05639f16,
+    type: 3}
+  m_PrefabInstance: {fileID: 785637646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &600424080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600424074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c87addfbca0be5498b78e989b9da7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sensitivity: {x: 1500, y: -1500}
+  Acceleration: {x: 2000, y: 2000}
+  InputLagPeriod: 0.005
+  _rotationDirections: 2
 --- !u!1001 &785637646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -573,6 +595,7 @@ MonoBehaviour:
   Sensitivity: {x: 1500, y: -1500}
   Acceleration: {x: 2000, y: 2000}
   InputLagPeriod: 0.005
+  _rotationDirections: 1
 --- !u!1001 &909747809
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1623,7 +1646,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1988040373}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1988040375
 Camera:
   m_ObjectHideFlags: 0

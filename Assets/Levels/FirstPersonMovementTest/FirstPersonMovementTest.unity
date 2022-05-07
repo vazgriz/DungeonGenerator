@@ -476,6 +476,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1336994966324827275, guid: 803ced248e3549b4eab6a0ad05639f16,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1336994966324827275, guid: 803ced248e3549b4eab6a0ad05639f16,
+        type: 3}
       propertyPath: m_Direction
       value: 1
       objectReference: {fileID: 0}
@@ -549,6 +554,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1336994966329576203, guid: 803ced248e3549b4eab6a0ad05639f16,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6
+      objectReference: {fileID: 0}
     - target: {fileID: 4974600459884732427, guid: 803ced248e3549b4eab6a0ad05639f16,
         type: 3}
       propertyPath: m_IsActive
@@ -580,6 +590,24 @@ MonoBehaviour:
   sceneLoader: {fileID: 1425491991}
   deathHandler: {fileID: 1425491990}
   hitPoints: 100
+--- !u!143 &843622554
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843622552}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &843622558
 MonoBehaviour:
   m_ObjectHideFlags: 0

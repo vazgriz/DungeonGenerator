@@ -20,6 +20,43 @@ public class MouseLook : MonoBehaviour
     private Vector2 _lastInputEvent;
     private float _inputLagTimer;
 
+    private void OnEnable()
+    {
+        ResetState();
+        var cameraAngles = GetCurrentCameraAngles();
+        SetLocalRotation(cameraAngles);
+
+        void ResetState()
+        {
+            _currentVelocity = default;
+            _inputLagTimer = default;
+            _lastInputEvent = default;
+        }
+
+        Vector3 GetCurrentCameraAngles()
+        {
+            var cameraEulerAngles = NormaliseEuler(transform.localEulerAngles);
+            cameraEulerAngles.x = ClampVerticalAngle(cameraEulerAngles.x);
+            return cameraEulerAngles;
+
+            Vector3 NormaliseEuler(Vector3 euler)
+            {
+                // Euler angles range from [0, 360] but we want [-180, 180]
+                if (euler.x >= 180)
+                {
+                    euler.x -= 360;
+                }
+                return euler;
+            }
+        }
+
+        void SetLocalRotation(Vector3 euler)
+        {
+            transform.localEulerAngles = euler;
+            _currentRotation = new Vector2(euler.y, euler.x);
+        }
+    }
+
     private void Update()
     {
         UpdateCurrentRotation();

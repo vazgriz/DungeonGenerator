@@ -21,8 +21,12 @@ public class PlayerController : MonoBehaviour
     [Range(0.0f, 0.5f)]
     private float _moveSmoothTime = 0.3f;
 
+    [SerializeField]
+    private float _gravity = -13f;
+
     private float _cameraPitch = 0.0f;
     private CharacterController _characterController;
+    private float _velocityY = default;
 
     private Vector2 _currentMouseDelta = default;
     private Vector2 _currentMouseDeltaVelocity = default;
@@ -81,7 +85,14 @@ public class PlayerController : MonoBehaviour
 
         _currentDirection = Vector2.SmoothDamp(_currentDirection, targetDirection, ref _currentDirectionVelocity, _moveSmoothTime);
 
-        Vector3 velocity = (transform.forward * _currentDirection.y + transform.right * _currentDirection.x) * _walkSpeed;
+        _velocityY += _gravity * Time.deltaTime;
+
+        if (_characterController.isGrounded)
+        {
+            _velocityY = 0;
+        }
+
+        Vector3 velocity = (transform.forward * _currentDirection.y + transform.right * _currentDirection.x) * _walkSpeed + Vector3.up * _velocityY;
         _characterController.Move(velocity * Time.deltaTime);   
     }
 

@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMovement()
     {
-        Vector2 targetDirection = new Vector2(InputHelper.HorizontalAxis(), Input.GetAxisRaw("Vertical"));
+        Vector2 targetDirection = new Vector2(InputHelper.HorizontalAxis, InputHelper.VerticalAxis);
         targetDirection.Normalize();
 
         _currentDirection = Vector2.SmoothDamp(_currentDirection, targetDirection, ref _currentDirectionVelocity, _moveSmoothTime);
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMouseLook()
     {
-        var targetMouseDelta = GetMouseInput();
+        var targetMouseDelta = InputHelper.MouseXY;
 
         _currentMouseDelta = Vector2.SmoothDamp(_currentMouseDelta, targetMouseDelta, ref _currentMouseDeltaVelocity, _mouseSmoothTime);
 
@@ -108,8 +108,6 @@ public class PlayerController : MonoBehaviour
 
         _playerCamera.localEulerAngles = Vector3.right * _cameraPitch;
         transform.Rotate(Vector3.up * _currentMouseDelta.x * _mouseSensitivity);
-
-        static Vector2 GetMouseInput() => new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
     private static float ClampVerticalAngle(float angle) => Mathf.Clamp(angle, -90, 90);

@@ -1,49 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
+    [SerializeField]
+    protected Camera Camera;
 
-    [SerializeField] Camera FPCamera;
-    [SerializeField] float Range = 100f;
-    [SerializeField] float damage = 20f;
-    [SerializeField] ParticleSystem MuzzleFlash;
+    [SerializeField]
+    protected Transform AttackPoint;
 
-    void Update()
-    {
-        if(Input.GetButtonDown("Fire1"))
-        {
-            PlayMuzzleFlash();
-            Shoot();
-        }
-    }
+    [SerializeField]
+    protected GameObject Round;
 
-    public void PlayMuzzleFlash()
-    {
-        MuzzleFlash.Play();
-    }
+    [SerializeField]
+    protected float Damage;
 
-    private void Shoot()
-    {
-        RaycastHit hit;
-        if(Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, Range))
-        {
-            // Debug.Log(hit.transform.name + " has been shot");
-            Debug.DrawRay(transform.position, FPCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            EnemyHealth target = hit.transform.GetComponentInParent<EnemyHealth>();
-            if(target == null)
-            {
-                return;
-            }
-            
-            target.TakeDamage(damage);
-        }
-        else
-        {
-            return;
-        }
+    [SerializeField]
+    protected float Range;
 
+    [SerializeField]
+    protected float ShootForce;
 
-    }
+    protected abstract void Fire();
 }

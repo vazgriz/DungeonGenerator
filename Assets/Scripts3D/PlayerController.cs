@@ -1,4 +1,5 @@
 using UnityEngine;
+using Assets.Helpers;
 
 public class PlayerController : MonoBehaviour
 {
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMovement()
     {
-        Vector2 targetDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 targetDirection = new Vector2(InputHelper.HorizontalAxis(), Input.GetAxisRaw("Vertical"));
         targetDirection.Normalize();
 
         _currentDirection = Vector2.SmoothDamp(_currentDirection, targetDirection, ref _currentDirectionVelocity, _moveSmoothTime);

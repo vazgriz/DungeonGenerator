@@ -252,7 +252,8 @@ public class Delaunay3D {
         Tetrahedra = new List<Tetrahedron>();
     }
 
-    public static Delaunay3D Triangulate(List<Vertex> vertices) {
+    public static Delaunay3D Triangulate(IEnumerable<Vertex> vertices) 
+    {
         Delaunay3D delaunay = new Delaunay3D();
         delaunay.Vertices = new List<Vertex>(vertices);
         delaunay.Triangulate();

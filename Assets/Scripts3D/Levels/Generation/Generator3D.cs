@@ -4,136 +4,126 @@ using Random = System.Random;
 using Graphs;
 using System.Linq;
 using Assets.Level.Models;
-using Assets.Level.Builders;
 using System;
 
 public class Generator3D : MonoBehaviour {
 
-    public enum CellType {
+    public enum CellType 
+    {
         None,
         Room,
         Hallway,
         Stairs
     }
 
-    private LevelBuilder _levelBuilder;
+    private Random _random;
 
-    [SerializeField]
-    Vector3Int size;
-    [SerializeField]
-    int roomCount;
-    [SerializeField]
-    Vector3Int roomMaxSize;
+    void Start() 
+    {
+        _random = new Random(0);
+    }
 
-    Random random;
-    Grid3D<CellType> grid;
-    List<Room> rooms;
-    HashSet<Prim.Edge> selectedEdges;
+    public Level Generate(Vector3Int size, int roomCount, Vector3Int roomMaxSize)
+    {
+        var grid = new Grid3D<CellType>(size, Vector3Int.zero);
 
-    private int numNotAdded = 0;
+        var rooms = PlaceRooms(size, roomCount, roomMaxSize, ref grid);
+        var delaunay = Triangulate(rooms);
+        
+        var selectedEdges = CreateHallways(delaunay);
+        var (hallways, staircases) = PathfindHallways(size, selectedEdges, grid);
 
-    void Start() {
-        random = new Random(0);
-        grid = new Grid3D<CellType>(size, Vector3Int.zero);
-        rooms = new List<Room>();
+        var level = new Level(rooms, hallways, staircases);
+        Debug.Log($"Generated level with {level.Rooms.Count} Rooms, {level.Hallways.Count} Hallways, {level.Staircases.Count} Staircases");
 
-        _levelBuilder = FindObjectOfType<LevelBuilder>();
+        return level;
+    }
 
-        PlaceRooms();
-        var delaunay = Triangulate();
+    private ICollection<Room> PlaceRooms(Vector3Int size, int roomCount, Vector3Int roomMaxSize, ref Grid3D<CellType> grid)
+    {
+        var rooms = new List<Room>();
+
+        for (int i = 0; i < roomCount; i++) 
+        {
+            Vector3Int location = new Vector3Int(
+                _random.Next(0, size.x),
+                _random.Next(0, size.y),
+                _random.Next(0, size.z)
+            );
+
+            Vector3Int roomSize = new Vector3Int(
+                _random.Next(1, roomMaxSize.x + 1),
+                _random.Next(1, roomMaxSize.y + 1),
+                _random.Next(1, roomMaxSize.z + 1)
+            );
+
+            Room newRoom = new Room(location, roomSize);
+            Room buffer = new Room(location + new Vector3Int(-1, 0, -1), roomSize + new Vector3Int(2, 0, 2));
+
+            if (RoomHasValidDimensions(newRoom) && !RoomIntersectsAnyExistingRoom(newRoom)) 
+            {
+                rooms.Add(newRoom);
+
+                foreach (var pos in newRoom.Bounds.allPositionsWithin) 
+                {
+                    grid[pos] = CellType.Room;
+                }
+            }
+        }
+
+        return rooms;
+
+        bool RoomHasValidDimensions(Room room)
+        {
+            return room.Bounds.xMin < 0 || room.Bounds.xMax >= size.x
+                || room.Bounds.yMin < 0 || room.Bounds.yMax >= size.y
+                || room.Bounds.zMin < 0 || room.Bounds.zMax >= size.z;
+        }
+        
+        bool RoomIntersectsAnyExistingRoom(Room room)
+        {
+            return rooms.Any(r => LevelComponent.Intersect(r, room));
+        }
+    }
+
+    private Delaunay3D Triangulate(ICollection<Room> rooms) 
+    {
+        var vertices = rooms.Select(room => new Vertex<Room>(room.Bounds.position + ((Vector3)room.Bounds.size) / 2, room));
+
+        var delaunay = Delaunay3D.Triangulate(vertices);
 
         if (!delaunay.Edges.Any())
         {
             throw new Exception("Level generation parameters resulted in delaunay with 0 edges. Try increasing room count or decreasing room max size");
         }
 
-        CreateHallways(delaunay);
-        var (hallways, staircases) = PathfindHallways();
-
-        var level = new Level(rooms, hallways, staircases);
-        _levelBuilder.Build(level);
-
-        Debug.Log($"Generated level with {level.Rooms.Count} Rooms, {level.Hallways.Count} Hallways, {level.Staircases.Count} Staircases");        
+        return delaunay;
     }
 
-    void PlaceRooms() {
-        for (int i = 0; i < roomCount; i++) {
-            Vector3Int location = new Vector3Int(
-                random.Next(0, size.x),
-                random.Next(0, size.y),
-                random.Next(0, size.z)
-            );
+    private HashSet<Prim.Edge> CreateHallways(Delaunay3D delaunay)
+    {
+        var edges = delaunay.Edges.Select(e => new Prim.Edge(e.U, e.V)).ToList();
 
-            Vector3Int roomSize = new Vector3Int(
-                random.Next(1, roomMaxSize.x + 1),
-                random.Next(1, roomMaxSize.y + 1),
-                random.Next(1, roomMaxSize.z + 1)
-            );
+        var minimumSpanningTree = Prim.MinimumSpanningTree(edges, edges[0].U);
 
-            bool add = true;
-            Room newRoom = new Room(location, roomSize);
-            Room buffer = new Room(location + new Vector3Int(-1, 0, -1), roomSize + new Vector3Int(2, 0, 2));
-
-            foreach (var room in rooms) {
-                if (Room.Intersect(room, buffer)) {
-                    add = false;
-                    break;
-                }
-            }
-
-            if (newRoom.Bounds.xMin < 0 || newRoom.Bounds.xMax >= size.x
-                || newRoom.Bounds.yMin < 0 || newRoom.Bounds.yMax >= size.y
-                || newRoom.Bounds.zMin < 0 || newRoom.Bounds.zMax >= size.z) {
-                add = false;
-            }
-
-            if (add) {
-                rooms.Add(newRoom);
-
-                foreach (var pos in newRoom.Bounds.allPositionsWithin) {
-                    grid[pos] = CellType.Room;
-                }
-            }
-            else
-            {
-                numNotAdded++;
-            }
-        }
-    }
-
-    private Delaunay3D Triangulate() {
-        List<Vertex> vertices = new List<Vertex>();
-
-        foreach (var room in rooms) {
-            vertices.Add(new Vertex<Room>((Vector3)room.Bounds.position + ((Vector3)room.Bounds.size) / 2, room));
-        }
-
-        return Delaunay3D.Triangulate(vertices);
-    }
-
-    void CreateHallways(Delaunay3D delaunay) {
-        List<Prim.Edge> edges = new List<Prim.Edge>();
-
-        foreach (var edge in delaunay.Edges) {
-            edges.Add(new Prim.Edge(edge.U, edge.V));
-        }
-
-        List<Prim.Edge> minimumSpanningTree = Prim.MinimumSpanningTree(edges, edges[0].U);
-
-        selectedEdges = new HashSet<Prim.Edge>(minimumSpanningTree);
+        var selectedEdges = new HashSet<Prim.Edge>(minimumSpanningTree);
         var remainingEdges = new HashSet<Prim.Edge>(edges);
         remainingEdges.ExceptWith(selectedEdges);
 
-        foreach (var edge in remainingEdges) {
-            if (random.NextDouble() < 0.125) {
+        foreach (var edge in remainingEdges) 
+        {
+            if (_random.NextDouble() < 0.125) 
+            {
                 selectedEdges.Add(edge);
             }
         }
+
+        return selectedEdges;
     }
 
-    (ICollection<Hallway>, ICollection<Staircase>) PathfindHallways() 
+    private (ICollection<Hallway>, ICollection<Staircase>) PathfindHallways(Vector3Int size, HashSet<Prim.Edge> selectedEdges, Grid3D<CellType> grid) 
     {
-        DungeonPathfinder3D aStar = new DungeonPathfinder3D(size);
+        var aStar = new DungeonPathfinder3D(size);
         var hallways = new List<Hallway>();
         var staircases = new List<Staircase>();
 
@@ -206,7 +196,7 @@ public class Generator3D : MonoBehaviour {
                 return pathCost;
             });
 
-            var (pathHallways, pathStaircases) = BuildPath(path);
+            var (pathHallways, pathStaircases) = BuildPath(path, grid);
             hallways.AddRange(pathHallways);
             staircases.AddRange(pathStaircases);
         }
@@ -214,7 +204,7 @@ public class Generator3D : MonoBehaviour {
         return (hallways, staircases);
     }
 
-    (ICollection<Hallway>, ICollection<Staircase>) BuildPath(List<Vector3Int> path)
+    private (ICollection<Hallway>, ICollection<Staircase>) BuildPath(List<Vector3Int> path, Grid3D<CellType> grid)
     {
         var hallways = new List<Hallway>();
         var staircases = new List<Staircase>();

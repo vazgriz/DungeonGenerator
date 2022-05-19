@@ -802,6 +802,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1180316802}
+  - component: {fileID: 1180316808}
   - component: {fileID: 1180316801}
   - component: {fileID: 1180316803}
   - component: {fileID: 1180316804}
@@ -827,9 +828,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2adc24e688e8841887873ee6b3e08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 30, y: 10, z: 30}
-  roomCount: 120
-  roomMaxSize: {x: 6, y: 2, z: 6}
 --- !u!4 &1180316802
 Transform:
   m_ObjectHideFlags: 0
@@ -856,11 +854,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241d403424997e4eba4ebc8be897f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  greenMaterial: {fileID: 2100000, guid: 13cd47135277903479d4b55421faa42e, type: 2}
-  redMaterial: {fileID: 2100000, guid: 71673d9873285904ab00282788add27f, type: 2}
-  blueMaterial: {fileID: 2100000, guid: bd79999920190574a94044b2acad7316, type: 2}
-  cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee,
-    type: 3}
 --- !u!114 &1180316804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,6 +917,21 @@ MonoBehaviour:
     type: 3}
   _floor: {fileID: 4192577636214743495, guid: 3af4e14782b98084f96e1c397f5b1f39, type: 3}
   _wall: {fileID: 8955920289896648722, guid: 7a6de4c8996f65a4ea47da8f0fec3ec0, type: 3}
+--- !u!114 &1180316808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180316800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 312ebb0816d5129418852d3499f5c0ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _size: {x: 0, y: 0, z: 0}
+  _roomCount: 0
+  _roomMaxSize: {x: 0, y: 0, z: 0}
 --- !u!1001 &1239157936
 PrefabInstance:
   m_ObjectHideFlags: 0

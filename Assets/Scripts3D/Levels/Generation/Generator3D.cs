@@ -18,7 +18,7 @@ public class Generator3D : MonoBehaviour {
 
     private Random _random;
 
-    void Start() 
+    void Awake() 
     {
         _random = new Random(0);
     }
@@ -60,7 +60,7 @@ public class Generator3D : MonoBehaviour {
             Room newRoom = new Room(location, roomSize);
             Room buffer = new Room(location + new Vector3Int(-1, 0, -1), roomSize + new Vector3Int(2, 0, 2));
 
-            if (RoomHasValidDimensions(newRoom) && !RoomIntersectsAnyExistingRoom(newRoom)) 
+            if (!RoomHasInvalidDimensions(newRoom) && !RoomIntersectsAnyExistingRoom(newRoom)) 
             {
                 rooms.Add(newRoom);
 
@@ -73,7 +73,7 @@ public class Generator3D : MonoBehaviour {
 
         return rooms;
 
-        bool RoomHasValidDimensions(Room room)
+        bool RoomHasInvalidDimensions(Room room)
         {
             return room.Bounds.xMin < 0 || room.Bounds.xMax >= size.x
                 || room.Bounds.yMin < 0 || room.Bounds.yMax >= size.y

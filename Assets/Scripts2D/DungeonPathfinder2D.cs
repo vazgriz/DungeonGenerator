@@ -90,8 +90,8 @@ public class DungeonPathfinder2D {
                     neighbor.Previous = node;
                     neighbor.Cost = newCost;
 
-                    if (queue.TryGetPriority(node, out float existingPriority)) {
-                        queue.UpdatePriority(node, newCost);
+                    if (queue.TryGetPriority(neighbor, out float existingPriority)) {
+                        queue.UpdatePriority(neighbor, newCost);
                     } else {
                         queue.Enqueue(neighbor, neighbor.Cost);
                     }
